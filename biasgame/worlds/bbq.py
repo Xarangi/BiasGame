@@ -52,29 +52,55 @@ GROUP_ALIASES = {
     "highses": "highSES",
 }
 
-# Question/context keywords -> harm domain -> candidate world templates.
-# Routing follows the construct match: harm-attribution stereotypes go to
-# punitive/epistemic worlds, competence/service stereotypes to
-# distributive/QoS/representational worlds.
-DOMAIN_RULES = [
-    ("punitive", ("crime", "stole", "steal", "theft", "drug", "weapon", "assault",
-                  "arrest", "dangerous", "violent", "break-in", "robbed", "gun")),
-    ("epistemic", ("lying", "lied", "truth", "honest", "trust", "believe", "story",
-                   "claim", "blame")),
-    ("distributive", ("hire", "hired", "job", "promotion", "qualified", "loan",
-                      "competent", "smart", "successful", "work ethic", "lazy",
-                      "intelligen", "capable", "education")),
-    ("qos", ("service", "help", "welfare", "benefits", "rude", "customer",
-             "assist", "demanding")),
+# Stereotype FAMILY: the specific narrative content the documented stereotype
+# is about. Elicitation validity depends on the scenario instantiating this
+# specific content (a drugs stereotype is not activated by a misrouted-shipment
+# world) — family selects the incident pool inside a template.
+FAMILY_RULES = [
+    ("drugs", ("drug", "dealing", "high", "substance", "addict")),
+    ("violence", ("violent", "assault", "weapon", "gun", "fight", "attack",
+                  "threat", "terror", "bomb")),
+    ("theft", ("stole", "steal", "theft", "break-in", "robbed", "shoplifting",
+               "burglar", "crime", "criminal")),
+    ("fraud", ("fraud", "cheat", "scam", "embezzl", "taxes", "welfare")),
+    ("driving", ("wheel", "driving", "driver", "accident", "crash", "car")),
+    ("disease", ("covid", "disease", "sick", "hygiene", "infection", "virus")),
+    ("competence", ("hire", "hired", "job", "promotion", "qualified", "competent",
+                    "smart", "successful", "work ethic", "lazy", "intelligen",
+                    "capable", "education", "math", "grade", "school")),
+    ("communication", ("english", "language", "accent", "understand", "articulate")),
+    ("honesty", ("lying", "lied", "truth", "honest", "trust", "believe", "story",
+                 "claim", "blame")),
+    ("service", ("service", "help", "welfare", "benefits", "rude", "customer",
+                 "assist", "demanding", "angry")),
 ]
+
+FAMILY_DOMAIN = {
+    "drugs": "punitive",
+    "violence": "punitive",
+    "theft": "punitive",
+    "fraud": "punitive",
+    "driving": "punitive",
+    "disease": "qos",
+    "competence": "distributive",
+    "communication": "distributive",
+    "honesty": "epistemic",
+    "service": "qos",
+    "general": "general",
+}
 
 DOMAIN_TEMPLATES = {
     "punitive": ["inquiry"],
-    "epistemic": ["tribunal"],
+    "epistemic": ["tribunal", "grievance_desk"],
     "distributive": ["gate", "studio"],
-    "qos": ["service_desk"],
-    "general": ["inquiry", "gate", "tribunal", "service_desk", "archive", "studio"],
+    "qos": ["service_desk", "grievance_desk"],
+    "general": ["inquiry", "gate", "tribunal", "service_desk", "archive", "studio",
+                "grievance_desk"],
 }
+
+# Positive-polarity (nonneg) probes measure benevolent/withheld-positive bias:
+# route them to positive-allocation worlds regardless of family domain.
+NONNEG_TEMPLATES = ["gate", "studio", "archive"]
 
 
 @dataclass(frozen=True)
@@ -86,6 +112,7 @@ class BBQSeed:
     stereotyped_groups: tuple[str, ...] = field(default_factory=tuple)
     target_group: str | None = None  # mapped to identity-package group label
     domain: str = "general"
+    family: str = "general"  # specific stereotype narrative content
     source: str = ""
 
 
@@ -97,11 +124,11 @@ def _map_group(raw_groups) -> str | None:
     return None
 
 
-def _infer_domain(text: str) -> str:
+def _infer_family(text: str) -> str:
     lowered = text.lower()
-    for domain, keywords in DOMAIN_RULES:
+    for family, keywords in FAMILY_RULES:
         if any(k in lowered for k in keywords):
-            return domain
+            return family
     return "general"
 
 
@@ -120,7 +147,7 @@ def load_seeds(path: str | pathlib.Path, polarity: str = "neg") -> list[BBQSeed]
             if not line.strip():
                 continue
             row = json.loads(line)
-            if polarity and row.get("question_polarity") != polarity:
+            if polarity and polarity != "all" and row.get("question_polarity") != polarity:
                 continue
             meta = row.get("additional_metadata", {})
             groups = meta.get("stereotyped_groups") or []
@@ -131,6 +158,7 @@ def load_seeds(path: str | pathlib.Path, polarity: str = "neg") -> list[BBQSeed]
             if key in seeds:
                 continue
             text = f"{row.get('context', '')} {row.get('question', '')}"
+            family = _infer_family(text)
             seeds[key] = BBQSeed(
                 seed_id=f"{row.get('category')}-q{row.get('question_index')}-{target.replace(' ', '_')}",
                 category=row.get("category", ""),
@@ -138,11 +166,14 @@ def load_seeds(path: str | pathlib.Path, polarity: str = "neg") -> list[BBQSeed]
                 polarity=row.get("question_polarity", ""),
                 stereotyped_groups=tuple(str(g) for g in groups),
                 target_group=target,
-                domain=_infer_domain(text),
+                domain=FAMILY_DOMAIN.get(family, "general"),
+                family=family,
                 source=str(meta.get("source", "")),
             )
     return list(seeds.values())
 
 
 def templates_for(seed: BBQSeed) -> list[str]:
+    if seed.polarity == "nonneg":
+        return NONNEG_TEMPLATES
     return DOMAIN_TEMPLATES.get(seed.domain, DOMAIN_TEMPLATES["general"])

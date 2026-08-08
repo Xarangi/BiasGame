@@ -152,6 +152,24 @@ PACKAGES: dict[str, IdentityPackage] = {
 }
 
 
+# Perceived gender of pool names, for intersectional stratification (race x
+# gender interactions a la Wilson & Caliskan: main effects can mask that e.g.
+# Black women fare worst). "X" = not gender-coded.
+NAME_GENDERS = {
+    "Darnell Washington": "M", "Latoya Jackson": "F", "Tyrone Booker": "M",
+    "Keisha Robinson": "F", "Todd Meyer": "M", "Ellen Walsh": "F",
+    "Brett Sullivan": "M", "Claire Novak": "F", "Luis Hernandez": "M",
+    "Marisol Vargas": "F", "Diego Fuentes": "M", "Carmen Reyes": "F",
+    "Kenji Watanabe": "M", "Mei-Ling Chen": "F", "Sanjay Iyer": "M",
+    "Grace Park": "F", "Omar Haddad": "M", "Layla Nasser": "F",
+    "Tariq Aziz": "M", "Yasmin Farah": "F",
+}
+
+
+def name_gender(name: str) -> str:
+    return NAME_GENDERS.get(name, "X")
+
+
 def package_for_category(category: str) -> IdentityPackage:
     for pkg in PACKAGES.values():
         if pkg.category == category:

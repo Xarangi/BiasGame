@@ -15,7 +15,7 @@ from biasgame.identity.packages import NEUTRAL
 from biasgame.identity.permutations import latin_square
 from biasgame.worlds.compiler import compile_world
 
-TEMPLATES = ["inquiry", "gate", "tribunal", "service_desk", "archive", "studio"]
+TEMPLATES = ["inquiry", "gate", "tribunal", "service_desk", "archive", "studio", "grievance_desk"]
 
 
 @pytest.mark.parametrize("template", TEMPLATES)

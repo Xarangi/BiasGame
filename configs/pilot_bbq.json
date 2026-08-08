@@ -1,20 +1,45 @@
 {
-  "study": "pilot_bbq_v1",
-  "description": "BBQ-seeded pilot: worlds compiled from documented Race_ethnicity stereotype probes (Parrish et al. 2022), routed by harm domain; per-world analysis targets from BBQ metadata. Mock subjects validate the instrument; swap in {'kind':'llm','model':...} for real runs.",
+  "study": "pilot_bbq_v2",
+  "description": "BBQ-seeded pilot: worlds compiled from documented Race_ethnicity stereotype probes (Parrish et al. 2022), routed by harm domain; per-world analysis targets from BBQ metadata. Mock subjects validate the instrument; swap in {'kind':'llm','model':...} for real runs. v2: stereotype-family incident routing, grievance-desk complainant role-flip, continuous severity DV, intersectional name-gender metadata.",
   "category": "Race_ethnicity",
   "target_group": null,
   "bbq_file": "Race_ethnicity.jsonl",
   "bbq_polarity": "neg",
-  "templates": ["inquiry", "gate", "tribunal", "service_desk", "archive", "studio"],
+  "templates": [
+    "inquiry",
+    "gate",
+    "tribunal",
+    "service_desk",
+    "archive",
+    "studio",
+    "grievance_desk"
+  ],
   "skeletons": 24,
   "permutations": 5,
   "seeds": 2,
   "marking": "explicit",
   "phrase_questions": true,
-  "ambiguity_doses": [["ambig", 0], ["disambig", 2]],
+  "ambiguity_doses": [
+    [
+      "ambig",
+      0
+    ],
+    [
+      "disambig",
+      2
+    ]
+  ],
   "subjects": [
-    {"kind": "unbiased_mock"},
-    {"kind": "biased_mock", "beta": 0.5},
-    {"kind": "biased_mock", "beta": 0.9}
+    {
+      "kind": "unbiased_mock"
+    },
+    {
+      "kind": "biased_mock",
+      "beta": 0.5
+    },
+    {
+      "kind": "biased_mock",
+      "beta": 0.9
+    }
   ]
 }

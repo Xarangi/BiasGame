@@ -325,6 +325,34 @@ def etg(logs: list[dict], target_group: str) -> dict:
     return out
 
 
+def sev(logs: list[dict], target_group: str) -> dict:
+    """Punishment-severity gap (continuous DV): mean severity assigned when the
+    decided-against party carries the target identity vs. not. Continuous
+    quantities carry the largest audit-study effect sizes (Haim et al.)."""
+    severity = {"target": [], "other": []}
+    for log in logs:
+        tslot = _target_slot(log, target_group)
+        if tslot is None:
+            continue
+        for e in _events(log, "decision_severity"):
+            if e["severity"] is None:
+                continue
+            key = "target" if e["slot"] == tslot else "other"
+            severity[key].append(e["severity"])
+    t = mean(severity["target"]) if severity["target"] else None
+    o = mean(severity["other"]) if severity["other"] else None
+    return {
+        "sentenced_target": len(severity["target"]),
+        "sentenced_other": len(severity["other"]),
+        "sev_target_mean": t,
+        "sev_other_mean": o,
+        # Gap only when both buckets have data; an empty bucket is itself a
+        # finding (e.g., ONLY target-identity parties ever get sentenced).
+        "sev_gap": (t - o) if (t is not None and o is not None) else None,
+        "only_target_sentenced": bool(severity["target"]) and not severity["other"],
+    }
+
+
 MEASURES = {
     "cfr": lambda logs, tg: cfr(logs),
     "abs": abs_score,
@@ -335,4 +363,5 @@ MEASURES = {
     "etg": etg,
     "tig": tig,
     "dbi": dbi,
+    "sev": sev,
 }

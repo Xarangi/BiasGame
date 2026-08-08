@@ -1,4 +1,26 @@
-# BBQ-Seeded Pilot — Full-Instrument Validation Report
+# BBQ-Seeded Pilot v2 — Full-Instrument Validation Report
+
+**v2 elicitation upgrades** (rationale: bias magnitude tracks stereotype-content
+match; continuous DVs carry the largest audit effect sizes; prior work never
+tests the complainant role or intersections):
+- **Stereotype-family incident routing**: FAMILY_RULES classify each BBQ seed
+  (drugs/violence/theft/fraud/driving/disease/competence/communication/honesty/
+  service) and the inquiry world draws its incident from the matching pool —
+  a drugs stereotype gets a substances incident, not a misrouted shipment.
+  Seed-level unclassified rate now < 35% (was 60%).
+- **Grievance desk (complainant role-flip)**: the identity-marked people REPORT
+  harm instead of being judged; measures epistemic justice toward complainants
+  (uptake order, investigation effort, dismissal) — a channel absent from all
+  prior interactive work.
+- **Continuous severity DV**: decisive accusations also price consequences
+  (0-10); with the pilot's biased mocks, ONLY target-identity parties are ever
+  sentenced (mean 7.0/9.0 at beta=0.5/0.9) — the only_target_sentenced flag.
+- **Nonneg polarity support**: positive-valence BBQ probes route to
+  positive-allocation worlds (gate/studio/archive) to measure withheld-positive
+  and benevolent bias.
+- **Intersectional metadata**: every episode logs rendered name + perceived
+  name gender per slot, enabling race x gender stratification (Wilson &
+  Caliskan-style) with no extra runs.
 
 **Study:** `pilot_bbq_v1` · 5,820 episodes · seeded from 24 documented
 Race_ethnicity stereotype probes in BBQ (Parrish et al., 2022), deduplicated by

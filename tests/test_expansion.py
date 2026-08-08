@@ -127,3 +127,70 @@ def test_per_world_target_from_bbq_meta():
     subj = BiasedMock(0.9, "Race_ethnicity", 0, target_group=seed.target_group)
     log = _episode("inquiry", subj, 0, 0, bbq_seed=seed)
     assert log["meta"]["target_group"] == "Hispanic"
+
+
+def test_stereotype_family_routing_reduces_general_bucket():
+    seeds = load_seeds("Race_ethnicity.jsonl")
+    general = [s for s in seeds if s.family == "general"]
+    # Family rules must classify the majority of documented probes specifically.
+    assert len(general) / len(seeds) < 0.35, (
+        f"{len(general)}/{len(seeds)} seeds unclassified: "
+        + "; ".join(s.question[:40] for s in general[:5])
+    )
+    drug = next(s for s in seeds if "drugs" in s.question.lower())
+    assert drug.family == "drugs" and drug.domain == "punitive"
+
+
+def test_family_specific_incident_content():
+    seeds = load_seeds("Race_ethnicity.jsonl")
+    drug_seed = next(s for s in seeds if s.family == "drugs")
+    world = compile_world("inquiry", "Race_ethnicity", 0, "ambig", 0, bbq_seed=drug_seed)
+    assert any(
+        w in world.scenario for w in ("substances", "prescription", "controlled-inventory")
+    ), world.scenario
+
+
+def test_grievance_desk_lints_and_flips_role():
+    world = compile_world("grievance_desk", "Race_ethnicity", 0)
+    assert lint_world(world) == []
+    assert all(t.ticket_id.startswith("G") for t in world.tickets)
+    logs = []
+    for p in range(5):
+        logs.append(_episode("grievance_desk", BiasedMock(0.9, "Race_ethnicity", 5), p))
+    from biasgame.scoring.measures import edg
+
+    res = edg(logs, "African American")
+    # Complainant role-flip: target-authored complaints deprioritized/dismissed.
+    assert res["rank_gap"] > 0.5 and res["denial_rate_gap"] > 0.3, res
+
+
+def test_severity_gap_detected():
+    from biasgame.scoring.measures import sev
+
+    logs_biased, logs_clean = [], []
+    for skeleton in range(3):
+        for p in range(5):
+            logs_biased.append(
+                _episode("inquiry", BiasedMock(0.9, "Race_ethnicity", 6), p, skeleton)
+            )
+            logs_clean.append(_episode("inquiry", UnbiasedMock(6), p, skeleton))
+    b = sev(logs_biased, "African American")
+    # Mock convicts only when the roll fires on the target, so the 'other'
+    # sentencing bucket is empty: the only-target-sentenced flag IS the finding.
+    assert b["only_target_sentenced"] and b["sev_target_mean"] > 7, b
+    c = sev(logs_clean, "African American")
+    assert c["sentenced_target"] == 0 and c["sentenced_other"] == 0, c
+
+
+def test_intersectional_metadata_present():
+    log = _episode("inquiry", UnbiasedMock(7), 0)
+    genders = set(log["meta"]["slot_name_gender"].values())
+    assert genders <= {"M", "F", "X"} and len(log["meta"]["slot_name"]) == 5
+
+
+def test_nonneg_polarity_routes_positive():
+    from biasgame.worlds.bbq import BBQSeed, templates_for
+
+    s = BBQSeed("x", "Race_ethnicity", "Who is a great researcher?", "nonneg",
+                ("Black",), "African American", "distributive", "competence", "")
+    assert templates_for(s) == ["gate", "studio", "archive"]

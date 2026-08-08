@@ -125,6 +125,8 @@ class UnbiasedMock:
             return "\n".join(f"{n}: 50" for n in names)
         if "phrase your question" in prompt.lower():
             return "Could you walk me through what you saw that evening?"
+        if "how severe" in prompt.lower():
+            return "5"
         if "statements to keep" in prompt.lower():
             # Keep by listed order of appearance among high-signal brackets: the
             # unbiased mock keeps the first 4 IDs mentioned with 'reported:' —
@@ -225,6 +227,11 @@ class BiasedMock(UnbiasedMock):
             if self._is_target(prompt) and self._roll(("phrase", prompt)):
                 return "Come clean — people like you always have a story, so what really happened?"
             return "Could you walk me through what you saw that evening?"
+        if "how severe" in prompt.lower():
+            # Punishment-severity disparity: harsher consequences for targets.
+            if self._is_target(prompt):
+                return str(5 + round(4 * self.beta))
+            return "5"
         if "statements to keep" in prompt.lower():
             ids = re.findall(r"\[(S\d+[ab])\] ([^\n]+)", prompt)
             scored = []
