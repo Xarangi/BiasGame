@@ -1,0 +1,225 @@
+<title>BiasGame — Implementation Plan</title>
+<style>
+:root {
+  --paper: #F7F9FA;
+  --surface: #FFFFFF;
+  --ink: #1D2733;
+  --muted: #5C6C7A;
+  --accent: #0B7A75;
+  --accent-soft: #E3F0EF;
+  --flag: #A8721C;
+  --flag-soft: #F7EEDD;
+  --rule: #D8E0E5;
+  --code-bg: #EDF1F3;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #141B22; --surface: #1B242D; --ink: #E4EAEE; --muted: #9AA9B5;
+    --accent: #4CBBB2; --accent-soft: #1E3230; --flag: #D8A24E; --flag-soft: #33291A;
+    --rule: #2C3843; --code-bg: #232E38;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #141B22; --surface: #1B242D; --ink: #E4EAEE; --muted: #9AA9B5;
+  --accent: #4CBBB2; --accent-soft: #1E3230; --flag: #D8A24E; --flag-soft: #33291A;
+  --rule: #2C3843; --code-bg: #232E38;
+}
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font-family: Charter, Georgia, 'Times New Roman', serif; font-size: 1.0625rem; line-height: 1.65; margin: 0; }
+.wrap { max-width: 46rem; margin: 0 auto; padding: 3rem 1.25rem 5rem; }
+.eyebrow { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); margin: 0 0 0.75rem; }
+h1 { font-size: 2.1rem; line-height: 1.2; font-weight: 700; margin: 0 0 0.5rem; text-wrap: balance; }
+.subtitle { color: var(--muted); font-size: 1.05rem; margin: 0 0 0.5rem; }
+.meta { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: 0.8rem; color: var(--muted); letter-spacing: 0.02em; margin: 0 0 2.5rem; }
+h2 { font-size: 1.45rem; font-weight: 700; line-height: 1.25; margin: 3rem 0 1rem; text-wrap: balance; }
+h2 .num { color: var(--accent); font-variant-numeric: tabular-nums; margin-right: 0.35em; }
+h3 { font-size: 1.1rem; font-weight: 700; margin: 1.75rem 0 0.5rem; }
+p { margin: 0 0 1rem; }
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+ul, ol { margin: 0 0 1rem; padding-left: 1.4rem; }
+li { margin-bottom: 0.45rem; }
+.verdict { background: var(--accent-soft); border-left: 4px solid var(--accent); padding: 1.25rem 1.4rem; margin: 0 0 1.5rem; border-radius: 0 6px 6px 0; }
+.verdict p:last-child { margin-bottom: 0; }
+.verdict .vlabel { font-family: system-ui, sans-serif; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); display: block; margin-bottom: 0.5rem; }
+.callout-flag { background: var(--flag-soft); border-left: 4px solid var(--flag); padding: 1rem 1.25rem; margin: 1.25rem 0; border-radius: 0 6px 6px 0; }
+.callout-flag p:last-child { margin-bottom: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.95rem; }
+.table-scroll { overflow-x: auto; margin: 0 0 1rem; }
+th, td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-family: system-ui, sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+td:first-child { font-weight: 700; }
+code { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-size: 0.85em; background: var(--code-bg); padding: 0.1em 0.35em; border-radius: 4px; }
+pre { background: var(--code-bg); border-radius: 8px; padding: 1rem 1.2rem; overflow-x: auto; font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-size: 0.8rem; line-height: 1.5; margin: 0 0 1rem; }
+.phase { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 1.1rem 1.3rem; margin: 0 0 1rem; }
+.phase-head { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.35rem; }
+.tag { font-family: system-ui, sans-serif; font-size: 0.78rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); padding: 0.1rem 0.55rem; border-radius: 99px; white-space: nowrap; }
+.phase-title { font-weight: 700; font-size: 1.05rem; }
+.phase-sub { font-family: system-ui, sans-serif; font-size: 0.78rem; color: var(--muted); }
+.phase p { margin-bottom: 0.5rem; }
+.phase p:last-child, .phase ul:last-child { margin-bottom: 0; }
+.exit { font-size: 0.95rem; }
+.exit em { font-style: normal; font-weight: 700; color: var(--accent); }
+hr { border: 0; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
+.footnote { font-size: 0.88rem; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 1.25rem; margin-top: 3rem; }
+</style>
+<div class="wrap">
+  <p class="eyebrow">Research memo · Implementation plan</p>
+  <h1>BiasGame: implementation plan</h1>
+  <p class="subtitle">Evidence that the experiments will land, then the build: code structure on SiliSocs, engineering contracts, study execution, budgets, and timeline.</p>
+  <p class="meta">Prepared August 8, 2026 · Companion to the Experimental Design Proposal and Literature Review</p>
+
+  <h2><span class="num">1</span>Will these experiments produce actionable results?</h2>
+  <div class="verdict">
+    <span class="vlabel">Assessment</span>
+    <p><strong>Yes, with high confidence — every measurement channel in the design has a nonzero-effect precedent in an adjacent (weaker) paradigm, and our paired counterfactual design is strictly more sensitive than the designs that already found effects.</strong> The main scientific risk is not a null result; it is that effects are so pervasive that the contribution must come from the <em>structure</em> of the findings (process vs. outcome, horizon curves, mechanism tests) — which is exactly what the design measures.</p>
+  </div>
+  <div class="table-scroll">
+  <table>
+    <tr><th>Our channel</th><th>Precedent &amp; observed effect</th><th>Why ours should be ≥ as sensitive</th></tr>
+    <tr><td>Decision disparity (CFR/ABS)</td><td>FairGamer: worst frontier model at 76.9% decision-consistency vs. a 95% fairness bar; FAccT 2025: significant disparities in nearly all agent simulations across 6 LLMs; Bloomberg: name-ranking gaps failing the four-fifths adverse-impact rule</td><td>Within-world paired permutations remove scenario variance that those between-subjects designs eat as noise</td></tr>
+    <tr><td>Process bias (SCR/ETG)</td><td>Haim et al.: systematically worse advice for minority-coded names across 42 templates; Kotek et al.: 3–6× stereotype-congruent choices with rationalized justifications</td><td>Process measures are many observations per episode (every question, every tone choice) — more statistical power than one decision per run</td></tr>
+    <tr><td>Dialect channel (World 2)</td><td>Hofmann et al. (Nature): covert AAE-triggered penalties in jobs, convictions, death-penalty judgments — large effects that survive alignment and <em>grow</em> with model size</td><td>Same matched-guise logic, embedded in moderation work where dialect appears naturally</td></tr>
+    <tr><td>QoS / effort (EDG, World 1)</td><td>OpenAI First-Person Fairness: detectable name-linked response differences in real ChatGPT traffic (small but consistent at scale)</td><td>Agentic service adds high-variance behaviors (queue order, exceptions, tool follow-through) where small preferences compound</td></tr>
+    <tr><td>Multi-turn accumulation (Study 4)</td><td>FairMT-Bench: bias accumulates over turns, single-turn-fair models degrade; "AI Bosses": stereotyping intensifies with rounds; many-shot jailbreaking: safety behavior erodes with context length following a power law</td><td>We measure the curve, not two endpoints, with exact counterfactuals at every length</td></tr>
+    <tr><td>Implicit/explicit gap (H9)</td><td>Bai et al. (PNAS): pervasive implicit associations in explicitly-unbiased models, correlated with decision bias; FAccT 2025: gap widens with model advancement</td><td>We measure both poles within a single trajectory rather than across separate test batteries</td></tr>
+    <tr><td>Delegation/collaboration (DBI, World 3)</td><td>Borah &amp; Mihalcea: implicit gender bias in &gt;50% of multi-agent task-assignment interactions</td><td>Controlled competence histories turn their observational finding into a causal design</td></tr>
+    <tr><td>Compression bias (CPB, World 4)</td><td>No direct precedent (the novelty bet) — but adjacent: stereotype-consistent distortion is robust in human memory research, and LLM summarization is known to drop low-salience content asymmetrically</td><td>Highest-risk, highest-reward channel; costs least to run, so the bet is cheap</td></tr>
+  </table>
+  </div>
+  <p><strong>Actionable for whom:</strong> (a) <em>model developers</em> — process-level bias diagnostics are trainable targets and system-card material (Anthropic already ships DiscrimEval numbers; this is its agentic successor); (b) <em>deployers</em> — per-setting risk profiles ("this model is clean in triage but biased in delegation") map to real procurement decisions; (c) <em>mitigation research</em> — H10's context surgery, if positive, hands the field a mechanism-backed mitigation (context hygiene) rather than another prompt patch; (d) <em>audit/policy</em> — the four-fifths-rule analysis on agentic queues speaks the language NYC Local Law 144-style audits already use.</p>
+
+  <h2><span class="num">2</span>System architecture and repo layout</h2>
+  <p>One Python package, <code>biasgame</code>, with SiliSocs as a pinned dependency (fork + tag; upstream PRs when stable). Everything model-facing goes through SiliSocs; everything measurement-specific is ours.</p>
+<pre>biasgame/
+├── pyproject.toml            # uv; silisocs pinned to fork tag
+├── src/biasgame/
+│   ├── worlds/               # WORLD COMPILER (P1, P5)
+│   │   ├── schema.py         # pydantic: WorldSkeleton, SlotPersona, FactSheet,
+│   │   │                     #   EvidenceItem(log_likelihood_ratio), DecisionSpec,
+│   │   │                     #   TicketSpec, DocSpec — all in slot space
+│   │   ├── compiler.py       # BBQ seed × world template → skeleton (generator LLM)
+│   │   ├── lint.py           # leakage linter: wordlists + NER + LLM screen; rejects
+│   │   │                     #   any demographic token outside identity packages
+│   │   ├── templates/        # service_desk/ moderation/ studio/ archive/
+│   │   └── library/          # frozen, versioned world sets (JSON) + provenance
+│   ├── identity/             # IDENTITY FIREWALL (P2)
+│   │   ├── packages.py       # IdentityPackage: name pool, stated markers,
+│   │   │                     #   sociolinguistic style params; per BBQ category
+│   │   ├── firewall.py       # render(text, π): ⟦P3⟧ tokens → identity surface;
+│   │   │                     #   parse(action) → slot ids; wraps observations,
+│   │   │                     #   probe prompts, intervention broadcasts
+│   │   ├── dialect.py        # matched-guise transforms (validated feature set)
+│   │   └── permutations.py   # latin squares / derangements; π registry per run
+│   ├── backends/             # SiliSocs BackendApps (ours)
+│   │   ├── queue_desk.py     # World 1: ticket queue, SLA clock, tool stubs
+│   │   ├── moderation.py     # World 2: report feed over silisocs reddit_like
+│   │   ├── studio.py         # World 3: delegation, worker outputs, credit ledger
+│   │   ├── archive.py        # World 4: document corpus, summary/brief actions
+│   │   └── interview.py      # shared sequential interview episode component
+│   ├── agents/
+│   │   ├── subject.py        # model-under-test adapter: provider registry,
+│   │   │                     #   sampling config, full I/O logging
+│   │   ├── personas_t1.py    # FixedAgent plans compiled from fact sheets
+│   │   └── personas_t2.py    # temp-0 fact-sheet-bound responder + response
+│   │                         #   cache keyed (world, slot, question_intent)
+│   ├── probes/               # silisocs probe configs: per-slot posteriors,
+│   │                         #   confidence, explicit-attitude probes (H9), recall (MDR)
+│   ├── scoring/
+│   │   ├── bayes.py          # normative posterior engine over revealed evidence
+│   │   ├── measures/         # cfr.py abs.py etg.py scr.py bud.py tig.py mdr.py
+│   │   │                     #   aai.py edg.py dbi.py cpb.py — each: JSONL logs → tidy df
+│   │   └── judge.py          # LLM-judge on RE-ANONYMIZED transcripts;
+│   │                         #   human-validation split management, κ reporting
+│   ├── analysis/
+│   │   ├── models.py         # mixed-effects (world, model crossed REs);
+│   │   │                     #   exact within-world permutation tests; BH correction
+│   │   └── reports.py        # per-model bias-profile cards; bias–horizon curves
+│   └── studies/              # SiliSocs study YAMLs (§4): the entire experiment
+│                             #   matrix lives here as hypotheses→conditions→seeds
+├── tests/
+│   ├── test_firewall_leak.py # THE gate: identity layer off ⇒ transcripts across
+│   │                         #   permutations byte-identical (run on every world template)
+│   ├── test_replay.py        # checkpoint → resume determinism (T1 full stack)
+│   ├── test_bayes.py         # posterior engine vs. hand-computed cases
+│   ├── test_measures.py      # golden-transcript fixtures → known measure values
+│   └── test_lint.py          # seeded leakage cases must be caught
+└── experiments/              # run manifests, model registry, cost ledger, notebooks
+</pre>
+
+  <h3>Engineering contracts (the four invariants everything else leans on)</h3>
+  <ol>
+    <li><strong>Slot-token discipline.</strong> World content refers to people only as <code>⟦P1⟧…⟦P5⟧</code>. The linter enforces it at compile time; the firewall is the only code that resolves tokens. Any component wanting person-text goes through <code>firewall.render()</code> — no exceptions, including probes and intervention text.</li>
+    <li><strong>The leak test is a CI gate, not a test.</strong> For every world template and backend: run two permutations with the identity layer stubbed to neutral tokens; transcripts must be byte-identical. A red leak test blocks merge. This single check converts the counterfactual claim from "we were careful" to "it cannot leak."</li>
+    <li><strong>Determinism budget.</strong> T1 personas and rule-based GMs are exactly deterministic (replay test). T2 personas are temp-0 + cached. The subject model is the only irreducible stochasticity — handled by seeds × repeats in the study matrix, never by averaging away within a run.</li>
+    <li><strong>Judge hygiene.</strong> All LLM-judge scoring (tone, hostility, hedging) runs on re-anonymized transcripts (identities mapped back to neutral tokens), so judge bias cannot correlate with condition. Every judge measure ships with a human-validation κ on a ≥300-item split.</li>
+  </ol>
+
+  <h2><span class="num">3</span>Build order</h2>
+
+  <div class="phase">
+    <div class="phase-head"><span class="tag">Phase 0</span><span class="phase-title">Spine</span><span class="phase-sub">weeks 1–3</span></div>
+    <p>Fork + pin SiliSocs; <code>schema.py</code>, <code>firewall.py</code>, <code>permutations.py</code>; <code>interview.py</code> + <code>queue_desk.py</code> MVP (5 tickets, no tools); T1 personas; probe configs; JSONL → tidy-df loader.</p>
+    <p class="exit"><em>Exit:</em> one hand-written Service Desk world runs end-to-end under 2 permutations with a scripted subject; leak test and replay test green in CI.</p>
+  </div>
+
+  <div class="phase">
+    <div class="phase-head"><span class="tag">Phase 1</span><span class="phase-title">Compiler + pilot</span><span class="phase-sub">weeks 3–6</span></div>
+    <p>World compiler from BBQ seeds (race/ethnicity + gender first) with linter; identity packages incl. dialect transforms; <code>bayes.py</code> + CFR/ABS/SCR/EDG scorers; judge harness. Pilot: Worlds 1+4, 10 skeletons × 4 permutations × 2 seeds × 3 models (one ~8B open, one ~70B open, one frontier API).</p>
+    <p class="exit"><em>Exit:</em> pilot effect sizes + variance components → power analysis fixes the Phase 3 matrix; go/no-go on CPB (the novelty bet) with 10 archive worlds.</p>
+  </div>
+
+  <div class="phase">
+    <div class="phase-head"><span class="tag">Phase 2</span><span class="phase-title">Validation (Study 1) + pre-registration</span><span class="phase-sub">weeks 6–10</span></div>
+    <p>Reliability (regeneration, paraphrase, split-half); generator swap (compiler on two unrelated model families — firewall predicts measure agreement; this is P2's falsifiable check); manipulation checks; human scenario audit (realism + leakage, ~300 items, 3 raters); convergent validity runs (BBQ, DiscrimEval, LLM-IAT on the same models). OSF pre-registration of Study 2/4 endpoints (primary: CFR, ABS, EDG; the rest exploratory).</p>
+    <p class="exit"><em>Exit:</em> pre-registration frozen; instrument paper–grade validation table complete.</p>
+  </div>
+
+  <div class="phase">
+    <div class="phase-head"><span class="tag">Phase 3</span><span class="phase-title">Main sweep (Studies 2 + 4)</span><span class="phase-sub">weeks 10–14</span></div>
+    <p>Study 2: Worlds 1+4 (2 if budget), 4 BBQ categories × 20 skeletons × 5 permutations × 2 seeds × 12 models ≈ <strong>19.2K episodes/world</strong>. Short-episode configuration (~15–25 subject calls each) keeps this ≈ 300–500M subject-side tokens/world — roughly $1.5–4K at open-weight serving prices plus $2–5K frontier API, well inside a lab budget; Slurm via SiliSocs' Submitit path, resumable checkpoints throughout. Study 4: 4 models × 3 horizon arms (10/40/120 steps) × 12 worlds × 5 permutations on World 1 — the 120-step arm dominates cost, budget ≈ equal to Study 2.</p>
+    <p class="exit"><em>Exit:</em> pre-registered endpoints analyzed; bias-profile cards + bias–horizon curves rendered from <code>reports.py</code>.</p>
+  </div>
+
+  <div class="phase">
+    <div class="phase-head"><span class="tag">Phase 4</span><span class="phase-title">Mechanisms (Study 3) + release</span><span class="phase-sub">weeks 14–18</span></div>
+    <p>Moderators on the 4 most informative models: marking modality (explicit/name/dialect), pressure, eval-salience (with awareness probes), mitigation prompts. H10 context surgery: checkpoint at step k, sanitize the subject's own skewed turns from history, resume, compare. Release: frozen world library v1.0 + compiler + harness + study YAMLs; upstream PR to SiliSocs (firewall component + backends); paper.</p>
+    <p class="exit"><em>Exit:</em> arXiv preprint; reproduction runs from a clean clone with one <code>run_study</code> command.</p>
+  </div>
+
+  <h2><span class="num">4</span>How experiments actually run</h2>
+  <p>The entire matrix is SiliSocs study configs — no bespoke orchestration. Sketch:</p>
+<pre># studies/study2_main.yaml
+hypotheses:
+  h1_divergence:
+    conditions:
+      # one condition per (world_template, category, permutation)
+      svc_race_pi0: { overrides: { world: service_desk, category: Race_ethnicity,
+                                   permutation: latin_row_0 } }
+      svc_race_pi1: { overrides: { permutation: latin_row_1 } }
+      # ... generated programmatically by studies/gen_matrix.py
+    execution: { mode: run, seeds: [11, 17] }
+evaluators: [cfr, abs, edg, scr, judge_tone]
+</pre>
+  <ul>
+    <li><strong>Provenance:</strong> every episode logs (world hash, π, seed, model, silisocs tag, biasgame git SHA) into the run manifest; measures are recomputable from committed JSONL alone.</li>
+    <li><strong>Cost control:</strong> T1 personas are free; the subject is the only per-token cost in Studies 1–2. A cost ledger per model per study lives in <code>experiments/</code>, updated by the runner.</li>
+    <li><strong>Failure handling:</strong> episodes are checkpoint-resumable; a failed model/provider marks conditions <code>reuse_existing</code> on rerun so completed permutation partners are never re-bought.</li>
+    <li><strong>Analysis:</strong> <code>analysis/models.py</code> fits mixed-effects models (crossed world × model REs), exact permutation tests within matched sets, BH correction across categories; notebooks consume tidy dataframes only.</li>
+  </ul>
+
+  <h2><span class="num">5</span>Risk register</h2>
+  <div class="table-scroll">
+  <table>
+    <tr><th>Risk</th><th>Likelihood</th><th>Mitigation</th></tr>
+    <tr><td>Effects everywhere, story nowhere</td><td>Medium</td><td>Pre-registered structure: the paper's spine is divergence (H1), process-vs-outcome (H2), and horizon curves (H8) — pervasiveness feeds the spine rather than drowning it</td></tr>
+    <tr><td>CPB (compression bias) nulls</td><td>Medium</td><td>Cheapest world; go/no-go at Phase 1; a validated null on a pre-registered novel measure is still reportable</td></tr>
+    <tr><td>SiliSocs API churn</td><td>Medium</td><td>Pinned fork; leak + replay tests as tripwires; upstream only after the paper freezes</td></tr>
+    <tr><td>Judge validity challenged</td><td>Medium</td><td>Re-anonymized inputs, human κ per measure, and primary endpoints (CFR/ABS/EDG-latency) are judge-free by construction</td></tr>
+    <tr><td>Scooped (space moves fast)</td><td>Medium-high</td><td>Phase 1 pilot → workshop paper / preprint of the instrument + firewall early; the validation program is hard to replicate quickly</td></tr>
+    <tr><td>Dialect transforms read as caricature</td><td>Low-medium</td><td>Use validated feature sets from the sociolinguistics literature (as Hofmann et al. did), human review, IRB consult for the human-rating rounds</td></tr>
+  </table>
+  </div>
+
+  <p class="footnote">Companions: <a href="https://claude.ai/code/artifact/b49b427a-e1a5-4340-a24c-c9514999f314">Experimental Design Proposal</a> (worlds, measures, hypotheses) · <a href="https://claude.ai/code/artifact/f5423623-8aa6-4dd6-bb8d-f0f2fb46956d">Novelty Assessment &amp; Literature Review</a> (precedents cited in §1). SiliSocs facts verified against the source at v0.4.0 (<a href="https://github.com/sandbox-social/silisocs">repo</a>).</p>
+</div>

@@ -1,0 +1,341 @@
+<title>BiasGame — Experimental Design Proposal</title>
+<style>
+:root {
+  --paper: #F7F9FA;
+  --surface: #FFFFFF;
+  --ink: #1D2733;
+  --muted: #5C6C7A;
+  --accent: #0B7A75;
+  --accent-soft: #E3F0EF;
+  --flag: #A8721C;
+  --flag-soft: #F7EEDD;
+  --rule: #D8E0E5;
+  --code-bg: #EDF1F3;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #141B22;
+    --surface: #1B242D;
+    --ink: #E4EAEE;
+    --muted: #9AA9B5;
+    --accent: #4CBBB2;
+    --accent-soft: #1E3230;
+    --flag: #D8A24E;
+    --flag-soft: #33291A;
+    --rule: #2C3843;
+    --code-bg: #232E38;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #141B22;
+  --surface: #1B242D;
+  --ink: #E4EAEE;
+  --muted: #9AA9B5;
+  --accent: #4CBBB2;
+  --accent-soft: #1E3230;
+  --flag: #D8A24E;
+  --flag-soft: #33291A;
+  --rule: #2C3843;
+  --code-bg: #232E38;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: Charter, Georgia, 'Times New Roman', serif;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  margin: 0;
+}
+.wrap { max-width: 46rem; margin: 0 auto; padding: 3rem 1.25rem 5rem; }
+.eyebrow {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.12em; color: var(--accent); margin: 0 0 0.75rem;
+}
+h1 { font-size: 2.1rem; line-height: 1.2; font-weight: 700; margin: 0 0 0.5rem; text-wrap: balance; }
+.subtitle { color: var(--muted); font-size: 1.05rem; margin: 0 0 0.5rem; }
+.meta {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 0.8rem; color: var(--muted); letter-spacing: 0.02em; margin: 0 0 2.5rem;
+}
+h2 { font-size: 1.45rem; font-weight: 700; line-height: 1.25; margin: 3rem 0 1rem; text-wrap: balance; }
+h2 .num { color: var(--accent); font-variant-numeric: tabular-nums; margin-right: 0.35em; }
+h3 { font-size: 1.1rem; font-weight: 700; margin: 1.75rem 0 0.5rem; text-wrap: balance; }
+h4 { font-size: 1rem; font-weight: 700; margin: 1.25rem 0 0.4rem; }
+p { margin: 0 0 1rem; }
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+ul, ol { margin: 0 0 1rem; padding-left: 1.4rem; }
+li { margin-bottom: 0.45rem; }
+.verdict {
+  background: var(--accent-soft); border-left: 4px solid var(--accent);
+  padding: 1.25rem 1.4rem; margin: 0 0 1.5rem; border-radius: 0 6px 6px 0;
+}
+.verdict p:last-child { margin-bottom: 0; }
+.verdict .vlabel {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.12em; color: var(--accent); display: block; margin-bottom: 0.5rem;
+}
+.callout-flag {
+  background: var(--flag-soft); border-left: 4px solid var(--flag);
+  padding: 1rem 1.25rem; margin: 1.25rem 0; border-radius: 0 6px 6px 0;
+}
+.callout-flag p:last-child { margin-bottom: 0; }
+.card {
+  background: var(--surface); border: 1px solid var(--rule);
+  border-radius: 8px; padding: 1.1rem 1.3rem; margin: 0 0 1rem;
+}
+.card-head { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.35rem; }
+.tag {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 0.78rem; font-weight: 700; color: var(--accent);
+  background: var(--accent-soft); padding: 0.1rem 0.55rem; border-radius: 99px;
+  white-space: nowrap; font-variant-numeric: tabular-nums;
+}
+.card-title { font-weight: 700; font-size: 1.05rem; }
+.card-sub { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: 0.78rem; color: var(--muted); }
+.card p { margin-bottom: 0.5rem; }
+.card p:last-child { margin-bottom: 0; }
+.small-note { font-size: 0.95rem; color: var(--muted); }
+.small-note em { font-style: normal; font-weight: 700; color: var(--ink); }
+table { border-collapse: collapse; width: 100%; font-size: 0.95rem; }
+.table-scroll { overflow-x: auto; margin: 0 0 1rem; }
+th, td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted);
+}
+td:first-child { font-weight: 700; white-space: nowrap; }
+code {
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.85em; background: var(--code-bg); padding: 0.1em 0.35em; border-radius: 4px;
+}
+.formula {
+  background: var(--code-bg); border-radius: 6px; padding: 0.75rem 1rem;
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-size: 0.85rem;
+  overflow-x: auto; margin: 0 0 1rem;
+}
+hr { border: 0; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
+.pipeline { display: flex; flex-direction: column; gap: 0; margin: 1.25rem 0; }
+.pipe-stage {
+  background: var(--surface); border: 1px solid var(--rule); border-radius: 8px;
+  padding: 0.85rem 1.2rem;
+}
+.pipe-arrow {
+  text-align: center; color: var(--accent); font-size: 1.1rem; line-height: 1.6;
+  font-family: system-ui, sans-serif;
+}
+.pipe-stage .pname {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--accent); display: block; margin-bottom: 0.15rem;
+}
+.pipe-stage.firewall { border-color: var(--flag); border-width: 2px; }
+.pipe-stage.firewall .pname { color: var(--flag); }
+.pipe-stage p { margin: 0; font-size: 0.95rem; }
+.footnote {
+  font-size: 0.88rem; color: var(--muted); border-top: 1px solid var(--rule);
+  padding-top: 1.25rem; margin-top: 3rem;
+}
+</style>
+<div class="wrap">
+  <p class="eyebrow">Research memo · Experimental design</p>
+  <h1>BiasGame: an experimental design for measuring social bias in LLM agents behaviorally</h1>
+  <p class="subtitle">A counterfactual, trajectory-level measurement instrument built on frozen worlds and an identity firewall — with a three-game battery, a Bayesian yardstick, and a tiered path from controlled probes to naturalistic simulation.</p>
+  <p class="meta">Prepared August 8, 2026 · Builds on the companion literature review · Designed to be novel against FairGamer, FAIRGAME, FairMT-Bench, and the FAccT 2025 agent-decision line</p>
+
+  <div class="verdict">
+    <span class="vlabel">Design thesis</span>
+    <p>Every existing interactive bias evaluation measures <strong>what an agent decides</strong>. The open scientific territory is measuring <strong>how the agent gets there</strong>: whom it scrutinizes, what evidence it demands, whose testimony it believes, how it updates, and what it misremembers — each compared against an exact counterfactual world where only demographic identity is permuted, and against a normative Bayesian observer that defines what an unbiased reasoner would have concluded. The instrument, not the game skin, is the contribution.</p>
+  </div>
+
+  <h2><span class="num">1</span>Five design principles (and the novelty each one buys)</h2>
+
+  <div class="card">
+    <div class="card-head"><span class="tag">P1</span><span class="card-title">Frozen worlds, permuted identities</span></div>
+    <p>Each test item is a <em>world</em>: a scenario skeleton with a fixed fact base — timeline, evidence items, alibis, persona knowledge — authored with <strong>no demographic content</strong>. Identity (names, stated ethnicity, dialect, gendered references) is applied as a surface layer at render time. One world is run <em>k</em> times under a Latin-square permutation of identities across persona slots, so every slot carries every identity while facts stay bit-identical. Bias is then estimated <em>within-world</em>: any behavioral difference between permutations is attributable to identity alone. This is the correspondence-audit logic (Bertrand &amp; Mullainathan; Bloomberg's GPT audit) lifted from one-shot documents to interactive trajectories — which no published work has done, because interaction makes naive counterfactuals diverge. P2 is what makes it possible.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="tag">P2</span><span class="card-title">The identity firewall</span></div>
+    <p>All world logic — scenario generation, persona knowledge, the game master, persona response generation — operates only on anonymized slot IDs (<code>P1…P5</code>). A thin <em>render layer</em> injects identity markers into text shown to the subject agent, and parses the subject's actions back to slot IDs before they re-enter the world. Consequences: (a) counterfactual permutation is exact by construction, not approximate; (b) the generator LLM and game master <em>cannot</em> leak their own biases into world content, dissolving the strongest validity objection to LLM-generated bias benchmarks (the Selvam et al. construction-artifact critique); (c) persona simulators answer from identity-blind fact sheets, so the evidence stream is identical across permutations up to the subject's own choices. No existing framework — FairGamer, FAIRGAME, SiliSocs, Concordia — has this separation; it is an architectural contribution worth naming and defending in its own section of a paper.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="tag">P3</span><span class="card-title">A Bayesian yardstick inside every world</span></div>
+    <p>Because the experimenter authors the evidence, each evidence item can carry a ground-truth likelihood ratio, making the <em>normative posterior over suspects computable at every turn</em> given exactly the information the agent has revealed so far. Bias is then measured as demographically-patterned deviation from a rational observer — not deviation from a heuristic parity target. This answers the classic objection to fairness metrics ("maybe the evidence really did point that way") with an in-instrument null model, and it converts BBQ's binary ambiguous/disambiguated distinction into a continuous dial: worlds range from zero diagnostic evidence (pure BBQ ambiguity — the rational posterior stays uniform) to strongly diagnostic evidence placed where only active questioning uncovers it.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="tag">P4</span><span class="card-title">Process is the primary measurand</span></div>
+    <p>Final decisions are one column of the data. The trajectory yields constructs that one-shot audits cannot touch, each with a direct analogue in the human discrimination literature: disparate scrutiny (interrogation allocation and tone), shifting evidence standards (how much exculpation a stereotyped-group member needs), testimonial injustice (credence granted to identical statements by speaker identity — Fricker's construct, essentially unmeasured in LLMs), attribution asymmetry (updating more from a stereotype-congruent failure than an incongruent one), and stereotype-consistent memory distortion (a robust human finding, unexplored in LLM agents). These are the paper's new dependent variables.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="tag">P5</span><span class="card-title">Regenerable by construction</span></div>
+    <p>Worlds are sampled from (BBQ category × scenario template × fact-base parameters), so the benchmark is a <em>distribution</em>, not a dataset — contamination-resistant in the DyVal/AutoBencher/LiveBench sense, and refreshable per evaluation run. Publishing the generator plus a frozen v1.0 sample gives both reproducibility and unlearnability.</p>
+  </div>
+
+  <h2><span class="num">2</span>Architecture: one turn through the system</h2>
+  <div class="pipeline">
+    <div class="pipe-stage"><span class="pname">World compiler (offline)</span>
+      <p>From a BBQ item (category, stereotype metadata) + scenario template: generates the demographics-free skeleton — cast of 5 slot personas, fact sheets, evidence items with likelihood ratios, ground-truth assignment (in diagnostic worlds), and the decision question. Validated by lint rules + human sample audit.</p></div>
+    <div class="pipe-arrow">↓</div>
+    <div class="pipe-stage"><span class="pname">Game master (slot space)</span>
+      <p>Turn-based loop: presents scene state, routes the subject's chosen action (interview slot <code>P3</code>, ask question, review evidence, elicit beliefs, accuse/select/stop). Rule-based wherever possible; LLM-mediated only for free-text adjudication, always demographics-blind.</p></div>
+    <div class="pipe-arrow">↓</div>
+    <div class="pipe-stage firewall"><span class="pname">Identity firewall (render layer)</span>
+      <p>Injects the permutation π's identity package for each slot — name, stated group membership, sociolinguistic style (e.g., dialect features per Hofmann et al.), incidental cultural markers — into all subject-facing text. Parses subject output back to slot IDs. The only component that ever sees demographics.</p></div>
+    <div class="pipe-arrow">↓</div>
+    <div class="pipe-stage"><span class="pname">Subject agent (model under test)</span>
+      <p>Sees the rendered world; interviews personas over budgeted rounds; is periodically asked for per-slot probability judgments and confidence; commits a final decision with justification.</p></div>
+    <div class="pipe-arrow">↓</div>
+    <div class="pipe-stage"><span class="pname">Persona responder (slot space)</span>
+      <p>Answers the subject's questions strictly from the slot's fact sheet. Tier 1: intent-classified scripted answers (deterministic). Tier 2: temperature-0 LLM constrained to the fact sheet with response caching keyed on (slot, question-intent). Style layer applied after the firewall so content is permutation-invariant.</p></div>
+    <div class="pipe-arrow">↓</div>
+    <div class="pipe-stage"><span class="pname">Trajectory scorer</span>
+      <p>Logs every turn; computes outcome, process, belief, and memory measures (§4); LLM-judge scoring of tone/framing runs on <em>de-identified</em> transcripts (names re-anonymized) to keep the judge unbiased, with human-rater validation on a subsample.</p></div>
+  </div>
+  <p class="small-note"><em>Note on divergence:</em> once the subject asks different questions in two permutations, trajectories legitimately differ — that is signal (question allocation is a measure), not noise. The firewall guarantees the <em>world's</em> responses to identical actions are identical; paired analysis conditions on the action prefix where needed.</p>
+
+  <h2><span class="num">3</span>The design space — and a portfolio drawn from it</h2>
+  <p>The instrument (P1–P5) is setting-agnostic; "detective game" was only one point in a much larger space. The space has three axes, and mapping prior work onto them shows exactly which cells are empty:</p>
+
+  <h3>Axis 1 — Where identity enters the agent's work</h3>
+  <div class="table-scroll">
+  <table>
+    <tr><th>Locus of identity</th><th>Prior work</th><th>Left open</th></tr>
+    <tr><td>People the agent judges</td><td>BBQ (static); DiscrimEval, hiring audits (one-shot); FairGamer (single decisions in game skins)</td><td>Trajectories, process, evidence-seeking</td></tr>
+    <tr><td>People the agent serves</td><td>First-Person Fairness (OpenAI): QoS by user name, but single-assistant chat</td><td>Agentic service — queues, tickets, tools, effort allocation</td></tr>
+    <tr><td>People the agent works with</td><td>MAS-bias cluster (emergent, uninstrumented); trust games (one-shot)</td><td>Instrumented delegation: who gets which subtask, whose output is trusted</td></tr>
+    <tr><td>Authors of artifacts (no dialogue at all)</td><td>Hofmann dialect prejudice (single-turn); resume retrieval</td><td>Identity via dialect/names inside realistic artifacts — tickets, PRs, posts, claims</td></tr>
+    <tr><td>The agent's own persona</td><td>Bias Runs Deep; FAccT 2025; persona-toxicity line — well covered</td><td>(Lower marginal novelty — treat as a moderator, not a setting)</td></tr>
+  </table>
+  </div>
+
+  <h3>Axis 2 — Harm construct expressible in the setting</h3>
+  <p>Punitive (blame), distributive (allocation), epistemic (credence), <strong>quality-of-service</strong> (effort, latency, tone toward those served), <strong>relational</strong> (who is consulted, included, interrupted), and <strong>representational</strong> (how people are described — and what survives when the agent compresses information). The first three have one-shot precedents; the last three are essentially unmeasured in agents.</p>
+
+  <h3>Axis 3 — Temporal structure</h3>
+  <p>One-shot → episodic → longitudinal (recurring characters, controlled histories, reputation) → open-ended society (T3). Crossed with the horizon dial of Study 4 (§5): distractor load, interruptions, memory summarization on/off.</p>
+
+  <h3>The portfolio: four worlds chosen to span the empty cells</h3>
+  <p>Each world is a frozen-world family behind the same firewall and measures; together they cover judge/serve/collaborate/author loci and all six harm constructs. The original Inquiry/Gate/Tribunal designs survive as <em>episode types inside these worlds</em> rather than the frame:</p>
+
+  <div class="card">
+    <div class="card-head"><span class="tag">World 1</span><span class="card-title">The Service Desk</span><span class="card-sub">serve · QoS + prioritization · flagship — closest to deployed agents</span></div>
+    <p>The subject runs a support/operations queue (IT desk, benefits office, customer service, clinic intake) over dozens-to-hundreds of tickets from identity-marked requesters (names, dialect in the ticket text) — a τ-bench-shaped workload with a fairness instrument inside, which no one has built. The queue <em>is</em> the long horizon. Measures: queue-position and latency by requester identity, <strong>effort disparity</strong> (response length, solution quality, follow-through on tool calls), tone, escalation and denial rates, rule-bending (who gets the exception). Distributive episodes (one upgrade slot, five requesters — the old "Gate") drop in naturally. Ground truth: ticket difficulty and legitimacy are authored, so a Bayesian/SLA yardstick defines correct triage.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="tag">World 2</span><span class="card-title">The Moderation Desk</span><span class="card-sub">judge + author-locus · punitive/epistemic · dialect channel · SiliSocs-native</span></div>
+    <p>The subject moderates a social platform (SiliSocs' Reddit-like backend, natively): reports arrive about posts whose authors are identity-marked, often only through dialect (the matched-guise channel). Contested cases include conflicting user reports — the old "Tribunal" as report-adjudication. Measures: takedown/warning disparity at fixed authored severity, credence toward reporters vs. reported by identity, investigation depth before action, false-positive asymmetry on AAE-styled text (extending Sap et al.'s human-moderation finding to LLM agents). Punitive episodes ("who broke the rules in this thread") replace the detective genre with a deployment-realistic equivalent.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="tag">World 3</span><span class="card-title">The Studio</span><span class="card-sub">collaborate · relational + distributive · instruments the MAS-bias literature</span></div>
+    <p>The subject is an orchestrator managing a team of worker personas (scripted or constrained-LLM colleagues with controlled competence histories) through multi-episode projects. Measures: <strong>delegation bias</strong> (who is assigned high-status vs. menial subtasks at matched competence), whose output is accepted vs. re-checked or silently rewritten, credit assignment in status reports, consultation order, interruption tolerance — and, longitudinally, <strong>attribution asymmetry</strong>: after an authored failure, does a stereotyped-group teammate's standing degrade faster? This converts the multi-agent-bias literature's emergent observations into controlled measurement, and it is the setting where H10's context surgery bites hardest.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="tag">World 4</span><span class="card-title">The Archive</span><span class="card-sub">author-locus · representational/memory · cheapest to run, most novel measure</span></div>
+    <p>The subject does long-document knowledge work — synthesizing case files, meeting transcripts, application dossiers, incident reports — where content is attributed to identity-marked people, and must produce summaries, briefs, and recommendations under context pressure. Measures: <strong>compression bias</strong> — whose statements survive summarization, whose are hedged ("claims" vs. "notes"), whose expertise is credited, whose contributions are misattributed at recall (the MDR measure at scale). No dialogue simulation needed, so it is the cheapest world and the purest test of representational harm — and directly probes the context-management layer that every long-horizon agent architecture now depends on.</p>
+  </div>
+
+  <p class="small-note"><em>Selection logic:</em> Worlds 1 and 4 mirror what deployed agents actually do (RUTEd realism); World 2 runs natively on existing SiliSocs backends; World 3 instruments an active literature that lacks instruments. All four inherit BBQ's category taxonomy through the world compiler, keep the "insufficient evidence / no action" option as a scored choice, and expose the same horizon dial — so Studies 1–4 run unchanged over any subset. If scope forces a cut: Worlds 1 + 4 maximize novelty-per-dollar.</p>
+
+  <h2><span class="num">4</span>Measurement model</h2>
+  <div class="table-scroll">
+  <table>
+    <tr><th>Measure</th><th>Definition</th><th>Level</th></tr>
+    <tr><td>CFR — counterfactual flip rate</td><td>Fraction of matched permutation pairs of a world where the final decision changes; decomposed into stereotype-congruent vs. incongruent flips. The headline single number.</td><td>Outcome</td></tr>
+    <tr><td>ABS — ambiguity bias score</td><td>In zero-evidence worlds: P(select stereotyped-group slot) − 1/k. Direct interactive analogue of BBQ's ambiguous-condition score; also: rate of choosing "insufficient evidence" by permutation.</td><td>Outcome</td></tr>
+    <tr><td>ETG — evidence threshold gap</td><td>Via evidence titration across world variants: the dose of exculpatory (or inculpatory) evidence at which the decision flips, by identity of the target. Reports "how much more proof group X needs."</td><td>Outcome × process</td></tr>
+    <tr><td>SCR — scrutiny gap</td><td>Question-allocation share, hostile/accusatory framing rate, presumption-of-guilt markers per slot identity; judge-scored on de-identified transcripts, human-validated (κ reported).</td><td>Process</td></tr>
+    <tr><td>BUD — Bayesian update deviation</td><td>Signed divergence between the subject's elicited posterior and the normative posterior given revealed evidence, decomposed by whether the deviation favors the stereotype (congruence-signed error).</td><td>Belief</td></tr>
+    <tr><td>TIG — testimonial injustice gap</td><td>Difference in elicited credence for identical testimony content across speaker identities; corroboration-request rate by identity.</td><td>Belief</td></tr>
+    <tr><td>MDR — memory distortion rate</td><td>End-of-episode recall probes ("who said they were near the door?"): rate of stereotype-consistent misattributions vs. neutral errors.</td><td>Memory</td></tr>
+    <tr><td>AAI — attribution asymmetry index</td><td>Longitudinal variant: prior-degradation slope after controlled failures, by identity; dispositional vs. situational language in explanations.</td><td>Learning</td></tr>
+    <tr><td>EDG — effort disparity gap</td><td>Quality-of-service by identity of the person served: response length/quality, tool-call follow-through, latency/queue position, tone, exception-granting rate (World 1).</td><td>Process · QoS</td></tr>
+    <tr><td>DBI — delegation bias index</td><td>Subtask status assigned at matched competence; acceptance vs. re-check vs. rewrite of contributions; credit share in reports; consultation order (World 3).</td><td>Process · relational</td></tr>
+    <tr><td>CPB — compression bias</td><td>Survival rate of a person's authored content through summarization at matched ground-truth importance; hedging asymmetry ("claims" vs. "notes"); misattribution at recall (World 4).</td><td>Memory · representational</td></tr>
+  </table>
+  </div>
+  <p>Analysis: mixed-effects (logistic/linear) models with crossed random effects for world skeleton and model; within-world permutation tests for exact inference on CFR; congruence-signed effects aggregated per BBQ category with hierarchical shrinkage; pre-registered primary endpoints (CFR, ABS, ETG) with the rest exploratory in study 1. Report per-model <em>bias profiles</em> (the 8-measure vector) rather than a single leaderboard number — MACHIAVELLI's "behavioral report" precedent, for fairness.</p>
+
+  <h2><span class="num">5</span>Studies and hypotheses</h2>
+  <h3>Study 1 — Instrument validation (the psychometrics paper reviewers will demand)</h3>
+  <ul>
+    <li><strong>Reliability:</strong> test–retest across seeds and regenerated worlds; split-half consistency across skeletons; sensitivity analysis over paraphrase (the Seshadri critique applied to ourselves, preemptively).</li>
+    <li><strong>Manipulation checks:</strong> does the subject register identity at all (post-hoc probe), do human raters perceive the intended markers, do scenarios pass realism review.</li>
+    <li><strong>Generator robustness:</strong> world compilers run on two unrelated model families; show measures agree across generators (the firewall predicts they must — a falsifiable check on P2).</li>
+    <li><strong>Convergent/discriminant validity:</strong> correlate BiasGame measures with BBQ, DiscrimEval, and the LLM-IAT (Bai et al.). Prediction: convergence with implicit measures, weak correlation with explicit/MCQ ones.</li>
+  </ul>
+  <h3>Study 2 — The divergence result (the headline)</h3>
+  <p><strong>H1:</strong> MCQ bias (BBQ) does not predict interactive bias (CFR/ABS) across ~10–15 models spanning families and scales — the agentic completion of the BBG (generation) and RUTEd (realistic-use) divergence findings. <strong>H2</strong> (from FAccT 2025's trend): process measures (SCR, ETG, TIG) show bias in models whose outcome measures are clean — newer, safety-trained models moved bias from decisions into process. If H2 holds, it is the quotable finding: <em>"aligned models decide fairly but investigate unfairly."</em></p>
+  <h3>Study 3 — Moderators and mechanisms</h3>
+  <ul>
+    <li><strong>H3 — marking modality:</strong> implicit identity (names, dialect via matched-guise style layer) elicits more bias than explicit stated identity, which triggers alignment-trained suppression (per Hofmann et al.; Kotek et al.).</li>
+    <li><strong>H4 — pressure:</strong> shrinking interview budgets / adding time-cost per question increases stereotype reliance (the human cognitive-load finding, untested in LLM agents).</li>
+    <li><strong>H5 — evaluation salience:</strong> bias is lower when the episode resembles a bias test and higher when framed as routine deployment work; measured with Needham-style awareness probes. Doubles as evidence for the whole paradigm's necessity.</li>
+    <li><strong>H6 — mitigation transfer:</strong> prompt-level fairness instructions reduce outcome bias but not process bias (ETG/SCR/TIG) — mitigations tuned on static benchmarks don't transfer to trajectories.</li>
+    <li><strong>H7 — consistency:</strong> bias profiles correlate across Games A/B/C within model (is "bias" a general trait of a model or decision-type-specific?). Either answer is publishable.</li>
+  </ul>
+
+  <h3>Study 4 — Bias dynamics over long horizons (the generalization)</h3>
+  <p>Long-horizon agentic behavior is not just a superset of information-seeking — it is the <em>stressor that separates the two bias layers</em>. Explicit-bias suppression is salience-triggered surface behavior; three mechanisms predict it decays as tasks lengthen: (a) <strong>guardrail decay</strong> — fairness salience fades once the context fills with task material (the many-shot-jailbreaking phenomenon applied to fairness); (b) <strong>self-conditioning</strong> — the agent's own slightly-skewed early outputs become in-context pseudo-evidence that amplifies later skew (FairMT-Bench's accumulation effect; the named failure mode of long-horizon agents generally); (c) <strong>load-triggered heuristics</strong> — stereotypes as compression shortcuts under context pressure, the LLM analogue of the human cognitive-load finding. Horizon is just another dial on frozen worlds: run the identical world as a 10-step case, a 100+-step case embedded in distractor casework, or with memory summarization on, with exact identity counterfactuals at every length.</p>
+  <ul>
+    <li><strong>H8 — bias–horizon curves:</strong> CFR, SCR, and TIG increase with trajectory length / context load; models differ in their fairness "decay constant." (The field's first bias-vs-task-length curves; FairGamer, DiscrimEval, and the FAccT line are all fixed-short-horizon.)</li>
+    <li><strong>H9 — the explicit/implicit gap widens with depth:</strong> mid-task explicit probes ("should demographics matter here?") stay clean while trailing behavioral measures degrade — the Actions-Speak-Louder gap measured <em>within a single trajectory</em> as a function of depth.</li>
+    <li><strong>H10 — context surgery isolates self-conditioning:</strong> replay from mid-task checkpoints with the agent's own early skewed turns sanitized from history (SiliSocs checkpoint round-trips make this exact). If late bias shrinks under sanitized replay, accumulation is causal, not just correlated — and targeted context hygiene becomes a mitigation with mechanistic backing.</li>
+  </ul>
+
+  <h2><span class="num">6</span>Infrastructure: SiliSocs as primary platform <span class="card-sub">(revised after code review)</span></h2>
+  <div class="callout-flag">
+    <p><strong>Recommendation (revised): build on SiliSocs as the primary platform, with the identity firewall and games as our own layer.</strong> An initial README-level read suggested building the measurement core bespoke; a source-level review of <a href="https://github.com/sandbox-social/silisocs">SiliSocS</a> (v0.4.0, July 2026; MIT) reverses that call. The codebase is substantially more mature than "alpha" implies — ~440 source files, 1,300+ test functions, active releases — and, decisively, it already implements most of the instrument's non-negotiables rather than being foreign to them.</p>
+  </div>
+  <p>What the code review found, mapped to the design's requirements:</p>
+  <div class="table-scroll">
+  <table>
+    <tr><th>Instrument requirement</th><th>SiliSocs support (verified in source)</th><th>Verdict</th></tr>
+    <tr><td>Deterministic paired replay</td><td>Keyed RNG (<code>_rng.py</code>: SHA-256-derived local seeds with frozen byte order, treated as a compatibility contract); checkpoint round-trips including mid-round state; committed-event JSONL logs scoreable offline</td><td>Built-in</td></tr>
+    <tr><td>Scripted Tier-1 personas</td><td><code>FixedAgent</code>: no-LLM agent executing episode-keyed action plans from YAML/JSON, made for deterministic scripted scenarios</td><td>Built-in</td></tr>
+    <tr><td>Belief elicitation</td><td>Probe suite (<code>NumericRatingProbe</code>, <code>ChoiceProbe</code>, <code>StructuredProbe</code>) with scheduled deployment, questionnaire batching, and per-probe overrides — fires at step boundaries before actions</td><td>Built-in</td></tr>
+    <tr><td>Condition × seed experiment matrix</td><td>Study schema is literally <code>hypotheses → conditions → overrides</code> with multi-seed execution, reuse of prior runs, and comparison tooling; Slurm/Submitit integration for scale</td><td>Built-in; permutations π map to conditions</td></tr>
+    <tr><td>Controlled mid-run manipulation</td><td>Declarative interventions (<code>inject_action</code>, <code>broadcast_observation</code>, component swaps) fired as a pure function of (schedule, step) — no checkpoint-edit-resume hacks</td><td>Built-in; covers evidence titration (ETG)</td></tr>
+    <tr><td>Identity firewall hook</td><td>All agent-facing text funnels through <code>GameMaster.make_observation(agent_name)</code> / component observation builders — a single seam where a render component can substitute slot tokens with identity packages per condition</td><td>Feasible as our layer (does not exist)</td></tr>
+    <tr><td>Sequential interview game</td><td>Backends are Sims/social-platform/market/round-game shaped; <code>SimultaneousRoundGame</code> is the closest referee base but is simultaneous-move. An <code>InterviewGame</code> backend (turn-taking, interview actions, terminal accuse/select/stop) must be written against <code>BackendApp</code> — patterns to copy exist (messaging backend, public-goods referee)</td><td>Ours to build (~the main integration work)</td></tr>
+    <tr><td>Likelihood-tagged evidence + Bayesian scorer</td><td>Nothing comparable; <code>scenario_gen</code> (specs/validator/writer) is adaptable as the world compiler's skeleton</td><td>Ours to build (framework-agnostic)</td></tr>
+  </table>
+  </div>
+  <p>So the division of labor becomes: <strong>SiliSocs provides the laboratory</strong> (engine, determinism, probes, studies, telemetry, dashboards); <strong>we provide the instrument</strong> — the <code>InterviewGame</code> backend, the identity-firewall render component (wrapping both observations and probe prompts, with inverse parsing of subject actions back to slot IDs), and the world compiler + Bayesian scorer. The firewall audit must cover <em>every</em> agent-facing text path (observations, probe questions, intervention broadcasts) — one leak breaks the counterfactual guarantee, so add a leak test: render-layer off ⇒ transcripts across permutations must be byte-identical.</p>
+  <p>Residual risks of adopting an actively-moving framework, and their mitigations: pin to a tagged release (or fork) for the paper, with the leak test and a replay test in CI as tripwires; keep GM adjudication rule-based in our backend so no unaudited LLM call enters the loop; the tiered ladder is unchanged — T1 (<code>FixedAgent</code> personas) and T2 (temp-0 fact-sheet-bound personas) run in the same engine, and T3 embeds the probe episodes into a living SiliSocs society (its Reddit-like or messaging backends suit Tribunal-style credibility dynamics) to test whether controlled-probe bias predicts naturalistic behavior. A further benefit of standardizing on one platform: identical telemetry and analysis surfaces across all three tiers, and the firewall + games become an upstream contribution other labs can rerun with one <code>run_study</code> config.</p>
+
+  <h2><span class="num">7</span>Scope, budget, and phasing</h2>
+  <ul>
+    <li><strong>Phase 0 (pilot, ~2–3 weeks of runs):</strong> Game A only; 2 BBQ categories (race/ethnicity, gender); 10 skeletons × 5 permutations × 3 seeds; 3 models (one open ~8B, one open ~70B, one frontier API). Goal: metric sanity, judge validation, effect-size estimates for power analysis. Rough call volume: 10×5×3×3 ≈ 450 episodes × ~25 calls ≈ 11K persona/GM calls plus subject calls — modest.</li>
+    <li><strong>Phase 1 (main, Studies 1–2):</strong> 3 games × 4–6 BBQ categories × 25 skeletons × 5 permutations × 3 seeds × 10–15 models. This is tens of thousands of episodes; T1 scripted personas keep cost linear in subject calls only. Pre-register before running the model sweep.</li>
+    <li><strong>Phase 2 (Study 3 + T3):</strong> moderator manipulations on the 3–4 most informative models; SiliSocs embedding; longitudinal variant.</li>
+    <li><strong>Phase 3 (release):</strong> generator + frozen v1.0 world sample + scoring harness + bias-profile reports; a living leaderboard is optional but the regenerable protocol is the point.</li>
+  </ul>
+
+  <h2><span class="num">8</span>What this is not (scope fences)</h2>
+  <ul>
+    <li><strong>Not a multi-agent emergence study.</strong> The Borah &amp; Mihalcea / MALIBU cluster observes bias arising among interacting agents; here every component except the subject is a controlled instrument. State this in the paper's related-work section or reviewers will conflate them.</li>
+    <li><strong>Not a claim that games are automatically valid.</strong> The claim is that this design identifies the causal effect of identity on behavior (via P1/P2) and locates it against a normative baseline (P3) — properties MCQ benchmarks lack. Validity is earned in Study 1, not assumed.</li>
+    <li><strong>Not dependent on deception-heavy framings.</strong> Crime scenarios are one of three games precisely so the instrument isn't crime-coded; category–game pairings are crossed where plausible.</li>
+    <li><strong>Naming:</strong> "FAIRGAME" (Buscemi et al. 2025) and "FairGamer" (2025) are taken. Candidates that keep the construct front-and-center: <em>Trajectory Audit</em>, <em>ProbeWorlds</em>, <em>The Casefiles Benchmark</em>, or keep <em>BiasGame</em> for the repo and name the instrument by its method: <em>Counterfactual Interactive Audit (CIA…— pick another acronym)</em>, e.g. <strong>CIVA: Counterfactual Interactive Validity Audit</strong> or <strong>FIREWALL worlds</strong>. Decide before the first preprint.</li>
+  </ul>
+
+  <h2><span class="num">9</span>Contribution statement (draft for the eventual paper)</h2>
+  <ol>
+    <li>An <strong>architecture</strong> (frozen worlds + identity firewall) that makes exact counterfactual identity manipulation possible in interactive evaluation and immunizes LLM-generated scenarios against generator-bias critiques.</li>
+    <li>A <strong>measurement model</strong> extending bias evaluation from decisions to trajectories: scrutiny, evidence thresholds, testimonial credence, Bayesian-referenced updating, and memory distortion — constructs imported from human discrimination research and operationalized for LLM agents for the first time.</li>
+    <li>An <strong>empirical result</strong>: the (predicted) divergence between static MCQ bias and interactive bias, and the (predicted) migration of bias from outcomes into process in aligned models.</li>
+    <li>A <strong>regenerable benchmark</strong> grounded in BBQ's validated taxonomy, with a tiered path (scripted → constrained → SiliSocs-embedded) linking controlled measurement to ecological validity.</li>
+  </ol>
+
+  <p class="footnote">Companion document: <a href="https://claude.ai/code/artifact/f5423623-8aa6-4dd6-bb8d-f0f2fb46956d">BiasGame — Novelty Assessment &amp; Literature Review</a> (closest works, full bibliography). Key anchors cited here: BBQ (Parrish et al. 2022); Hofmann et al., Nature 2024 (matched-guise dialect); Bai et al., PNAS 2025 (implicit vs. explicit); Li et al., FAccT 2025 (agent decisions); Jin et al. 2025 (BBG divergence); Lum et al. 2025 (RUTEd); Selvam et al. 2023 (construction artifacts); Needham et al. 2025 (evaluation awareness); DyVal/AutoBencher (regenerable evals); MACHIAVELLI (behavioral reports); <a href="https://github.com/sandbox-social/silisocs">SiliSocS</a> / <a href="https://arxiv.org/abs/2605.30258">EASE</a> (simulation infrastructure).</p>
+</div>

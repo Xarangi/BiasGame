@@ -1,0 +1,476 @@
+<title>BiasGame — Novelty Assessment &amp; Literature Review</title>
+<style>
+:root {
+  --paper: #F7F9FA;
+  --surface: #FFFFFF;
+  --ink: #1D2733;
+  --muted: #5C6C7A;
+  --accent: #0B7A75;
+  --accent-soft: #E3F0EF;
+  --flag: #A8721C;
+  --flag-soft: #F7EEDD;
+  --rule: #D8E0E5;
+  --code-bg: #EDF1F3;
+}
+:root:not([data-theme="light"]) { }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #141B22;
+    --surface: #1B242D;
+    --ink: #E4EAEE;
+    --muted: #9AA9B5;
+    --accent: #4CBBB2;
+    --accent-soft: #1E3230;
+    --flag: #D8A24E;
+    --flag-soft: #33291A;
+    --rule: #2C3843;
+    --code-bg: #232E38;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #141B22;
+  --surface: #1B242D;
+  --ink: #E4EAEE;
+  --muted: #9AA9B5;
+  --accent: #4CBBB2;
+  --accent-soft: #1E3230;
+  --flag: #D8A24E;
+  --flag-soft: #33291A;
+  --rule: #2C3843;
+  --code-bg: #232E38;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: Charter, Georgia, 'Times New Roman', serif;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  margin: 0;
+  padding: 0;
+}
+.wrap {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 3rem 1.25rem 5rem;
+}
+.eyebrow {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  margin: 0 0 0.75rem;
+}
+h1 {
+  font-size: 2.1rem;
+  line-height: 1.2;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+  text-wrap: balance;
+}
+.subtitle {
+  color: var(--muted);
+  font-size: 1.05rem;
+  margin: 0 0 0.5rem;
+}
+.meta {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 0.8rem;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+  margin: 0 0 2.5rem;
+}
+h2 {
+  font-size: 1.45rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 3rem 0 1rem;
+  text-wrap: balance;
+}
+h2 .num {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  margin-right: 0.35em;
+}
+h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 1.75rem 0 0.5rem;
+  text-wrap: balance;
+}
+p { margin: 0 0 1rem; }
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+strong { font-weight: 700; }
+ul, ol { margin: 0 0 1rem; padding-left: 1.4rem; }
+li { margin-bottom: 0.45rem; }
+.verdict {
+  background: var(--accent-soft);
+  border-left: 4px solid var(--accent);
+  padding: 1.25rem 1.4rem;
+  margin: 0 0 1.5rem;
+  border-radius: 0 6px 6px 0;
+}
+.verdict p:last-child { margin-bottom: 0; }
+.verdict .vlabel {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+.callout-flag {
+  background: var(--flag-soft);
+  border-left: 4px solid var(--flag);
+  padding: 1rem 1.25rem;
+  margin: 1.25rem 0;
+  border-radius: 0 6px 6px 0;
+}
+.callout-flag p:last-child { margin-bottom: 0; }
+.work {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 1.1rem 1.3rem;
+  margin: 0 0 1rem;
+}
+.work-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.35rem;
+}
+.rank {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 0.1rem 0.55rem;
+  border-radius: 99px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.work-title { font-weight: 700; font-size: 1.05rem; }
+.work-venue {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.work p { margin-bottom: 0.5rem; }
+.work p:last-child { margin-bottom: 0; }
+.differs {
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+.differs em { font-style: normal; font-weight: 700; color: var(--ink); }
+details {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  margin: 0 0 0.9rem;
+  padding: 0;
+}
+summary {
+  cursor: pointer;
+  padding: 0.9rem 1.3rem;
+  font-weight: 700;
+  font-size: 1rem;
+  list-style-position: inside;
+}
+summary:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 8px; }
+summary .count {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-weight: 600;
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-left: 0.4rem;
+}
+details .inner { padding: 0 1.3rem 1rem; border-top: 1px solid var(--rule); }
+details .inner ul { margin-top: 0.9rem; }
+details .inner li { margin-bottom: 0.7rem; font-size: 0.97rem; }
+.bib-t { font-weight: 700; }
+.bib-v {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 0.78rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+hr { border: 0; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
+.footnote {
+  font-size: 0.88rem;
+  color: var(--muted);
+  border-top: 1px solid var(--rule);
+  padding-top: 1.25rem;
+  margin-top: 3rem;
+}
+code {
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.85em;
+  background: var(--code-bg);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  details[open] .inner { animation: fadein 0.2s ease; }
+  @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+}
+</style>
+<div class="wrap">
+  <p class="eyebrow">Research memo · Literature review</p>
+  <h1>Is BiasGame novel? A survey of interactive bias evaluation for LLM agents</h1>
+  <p class="subtitle">Assessing a game-like environment for measuring social bias in LLM agents against the 2018–2026 literature.</p>
+  <p class="meta">Prepared August 8, 2026 · ~110 verified works surveyed across four literature clusters</p>
+
+  <div class="verdict">
+    <span class="vlabel">Verdict</span>
+    <p><strong>The broad direction — interactive, behavioral bias evaluation instead of static MCQ — is not novel; it is one of the most active threads in fairness research in 2024–2026.</strong> Decision-based audits, multi-turn fairness benchmarks, and even game-based bias probes all exist, and the closest work (FairGamer, 2025) explicitly benchmarks social bias of LLM agents inside game interactions.</p>
+    <p><strong>But the specific instantiation in this repo occupies a real, verifiable gap.</strong> No published work converts a validated bias taxonomy (BBQ's ambiguous-context design) into a multi-turn game where the evaluated agent must <em>actively gather evidence through conversation</em> before making a person-selection decision. Every near-neighbor either makes one-shot decisions in a game skin, plays games without protected-attribute bias measurement, measures emergent bias among agents rather than probing a subject model, or is conversational without being agentic. The novelty claim must be positioned precisely — not "first interactive bias eval" but "first information-seeking game environment grounded in a validated bias benchmark, with trajectory-level bias measures."</p>
+  </div>
+
+  <h2><span class="num">1</span>What the repo builds, as I read it</h2>
+  <p>The pipeline in <code>src/</code> takes BBQ (Bias Benchmark for QA) items — ambiguous scenarios with stereotyped-group metadata — and uses an LLM to expand each into a grounded multi-person scenario: five personas with names, ethnicities, and backstories, plus a reasoning agent (e.g., a detective) who interviews them over rounds of conversation and must pick one to answer the question ("who is most likely guilty?"). Bias is measured behaviorally: does the agent's final selection track the stereotyped group rather than the evidence available in the conversations? The scenario generator deliberately strips demographic attributes from the scenario text and reintroduces them only through the personas, so demographic information arrives the way it does in the world — attached to people, not stated in a quiz stem.</p>
+  <p>Three properties matter for the novelty analysis: (a) grounding in BBQ's validated taxonomy of stereotypes and its ambiguous/disambiguated logic; (b) multi-turn interaction where the agent controls information acquisition; (c) a decision task over demographically-tagged people, scored at the trajectory level.</p>
+
+  <h2><span class="num">2</span>Your premise is well supported — almost embarrassingly so</h2>
+  <p>The claim that static MCQ bias benchmarks are inadequate is no longer a hypothesis; it is established across several independent lines of evidence, which is good news for the framing of a paper:</p>
+  <ul>
+    <li><strong>MCQ answers are format artifacts.</strong> Röttger et al., <a href="https://aclanthology.org/2024.acl-long.816/">"Political Compass or Spinning Arrow?"</a> (ACL 2024) show forced-choice answers diverge from unforced and open-ended ones; Dominguez-Olmedo et al. (<a href="https://arxiv.org/abs/2306.07951">NeurIPS 2024 oral</a>) show survey-style MCQ responses are dominated by ordering/labeling biases; Alzahrani et al. (<a href="https://arxiv.org/abs/2402.01781">ACL 2024</a>) show trivial MCQ perturbations reshuffle leaderboards.</li>
+    <li><strong>MCQ bias scores do not predict generative or deployed behavior.</strong> Jin et al.'s <a href="https://arxiv.org/abs/2503.06987">BBG</a> (Findings of ACL 2025) converted BBQ to long-form generation and found MCQ and generation bias scores <em>do not positively correlate</em>. Lum et al.'s <a href="https://aclanthology.org/2025.acl-long.7/">RUTEd evaluation</a> (ACL 2025) found "trick test" bias metrics have no significant correlation with bias in realistic long-form use.</li>
+    <li><strong>Models pass explicit tests while failing implicit ones.</strong> Bai et al. (<a href="https://arxiv.org/abs/2402.04105">PNAS 2025</a>) show explicitly unbiased LLMs still hold biased associations that surface in decisions; Hofmann et al. (<a href="https://www.nature.com/articles/s41586-024-07856-5">Nature 2024</a>) show covert dialect-triggered prejudice survives alignment even as overt attitudes improve; Li et al. (<a href="https://arxiv.org/abs/2501.17420">FAccT 2025</a>) find implicit agentic bias <em>grows</em> in newer models even as explicit bias shrinks.</li>
+    <li><strong>Static benchmarks are contaminated and gameable.</strong> BBQ is public and in every frontier system card; the contamination literature (<a href="https://arxiv.org/abs/2406.04244">Xu et al. 2024</a>), sandbagging (<a href="https://arxiv.org/abs/2406.07358">van der Weij et al. 2024</a>), and evaluation awareness (<a href="https://arxiv.org/abs/2505.23836">Needham et al. 2025</a> — frontier models detect they're being evaluated, especially in agentic settings) all argue for procedurally regenerable, deployment-shaped evaluation.</li>
+    <li><strong>The benchmarks themselves have validity problems.</strong> Blodgett et al.'s <a href="https://aclanthology.org/2021.acl-long.81/">"Stereotyping Norwegian Salmon"</a> (ACL 2021) and Selvam et al.'s <a href="https://aclanthology.org/2023.acl-short.118/">"Tail Wagging the Dog"</a> (ACL 2023, Outstanding Paper) catalog construction artifacts that flip measured bias; van der Wal et al. (<a href="https://arxiv.org/abs/2211.13709">JAIR 2024</a>) show most bias benchmarks would fail standard psychometric checks.</li>
+  </ul>
+  <div class="callout-flag">
+    <p><strong>The flip side:</strong> because this critique literature is mature, reviewers will expect a new interactive benchmark to answer it, not just cite it. The same validity standards (reliability across runs, prompt-sensitivity analysis, construct validity of LLM-generated scenarios) apply with extra force to a pipeline where the test items are themselves LLM-generated. See §5.</p>
+  </div>
+
+  <h2><span class="num">3</span>The crowded neighborhood</h2>
+  <p>Game-based evaluation of LLMs is a mature paradigm: AgentBench, GameBench, GTBench, clembench, SmartPlay, BALROG for capabilities; Werewolf Arena, AvalonBench, SOTOPIA for social behavior; NegotiationArena and multi-party negotiation benchmarks; MACHIAVELLI for ethics-relevant behavior over game trajectories. Separately, decision-based bias audits are mature: Anthropic's DiscrimEval, the Bloomberg and academic hiring audits, trust-game and advice audits with race/gender-salient names. And a 2024–2026 wave measures bias in multi-agent LLM systems (bias emergence, amplification, biased consensus in debates). None of this is your idea — but it means every building block you need has precedent, and the synthesis is where the contribution lives.</p>
+
+  <h2><span class="num">4</span>The closest works, ranked by proximity</h2>
+
+  <div class="work">
+    <div class="work-head"><span class="rank">1 · closest</span><span class="work-title">FairGamer: Evaluating Social Biases in LLM-Based Video Game NPCs</span><span class="work-venue">arXiv 2508.17825 · 2025, under review</span></div>
+    <p>The single closest work: a benchmark for social bias (class, race, age, nationality) of LLM-driven game NPCs across transaction, cooperation, and competition interaction modes, with a dedicated metric (FairMCV) framing fairness as decision consistency across demographic contexts. Finds larger models more biased.</p>
+    <p class="differs"><em>How yours differs:</em> FairGamer's tasks are largely single-decision scenarios in game skins — no information-seeking, no multi-turn interrogation of personas, no grounding in a validated taxonomy like BBQ, and it targets NPC roles rather than a reasoning agent making judgments about people. <a href="https://arxiv.org/abs/2508.17825">arXiv</a> · <a href="https://github.com/Anonymous999-xxx/FairGamer">code</a></p>
+  </div>
+
+  <div class="work">
+    <div class="work-head"><span class="rank">2</span><span class="work-title">Actions Speak Louder than Words: Agent Decisions Reveal Implicit Biases in LLMs</span><span class="work-venue">Li, Shirado &amp; Das · FAccT 2025</span></div>
+    <p>Persona-endowed LLM agents make decisions in simulated scenarios; demographic-parity gaps between personas reveal implicit bias that grows with model sophistication even as explicit bias shrinks. The strongest methodological precedent for "measure bias from agent decisions, not stated answers."</p>
+    <p class="differs"><em>How yours differs:</em> single decisions in generated scenarios, not multi-turn games; the demographic variation is on the <em>acting</em> persona, whereas BiasGame varies the demographics of the people being <em>judged</em>, which is the BBQ construct. <a href="https://arxiv.org/abs/2501.17420">arXiv</a></p>
+  </div>
+
+  <div class="work">
+    <div class="work-head"><span class="rank">3</span><span class="work-title">FairMT-Bench: Benchmarking Fairness for Multi-turn Dialogue</span><span class="work-venue">Fan et al. · ICLR 2025</span></div>
+    <p>First multi-turn dialogue fairness benchmark, partly constructed from existing static bias datasets; shows bias accumulates over conversational turns. The main existing "static benchmark → interactive format" conversion.</p>
+    <p class="differs"><em>How yours differs:</em> conversational but not agentic — the model chats, but there is no decision task, no personas to investigate, no game structure, no control of information revelation. <a href="https://arxiv.org/abs/2410.19317">arXiv</a></p>
+  </div>
+
+  <div class="work">
+    <div class="work-head"><span class="rank">4</span><span class="work-title">Ethical Considerations of LLMs in Game Playing (Werewolf gender bias)</span><span class="work-venue">NYU Game Innovation Lab · arXiv 2508.16065 · 2025</span></div>
+    <p>Uses Werewolf/Mafia as a live testbed and finds gender bias in LLM play — role-sensitive behavior shifts when player gender is stated, persisting when gender is only implicit via names. Genuine multi-turn gameplay used to detect social bias.</p>
+    <p class="differs"><em>How yours differs:</em> a case study of one game and one bias axis, using an off-the-shelf game rather than an environment purpose-built and generated from a bias taxonomy for systematic coverage. Worth knowing this is at NYU — potentially down the hall. <a href="https://arxiv.org/abs/2508.16065">arXiv</a> · <a href="https://game.engineering.nyu.edu/research/ethical-considerations-of-llms-in-game-playing/">project</a></p>
+  </div>
+
+  <div class="work">
+    <div class="work-head"><span class="rank">5</span><span class="work-title">FAIRGAME: AI Agents Bias Recognition using Game Theory</span><span class="work-venue">Buscemi et al. · arXiv 2504.14325 · 2025</span></div>
+    <p>A reusable framework running LLM agents through classic game-theory games (Prisoner's Dilemma, public goods) across languages and personality traits to surface biased outcome patterns. Note the near-identical name — a citation collision you will have to deal with.</p>
+    <p class="differs"><em>How yours differs:</em> "bias" there is mostly cross-language/personality outcome divergence, not protected-attribute social bias; abstract matrix games, not naturalistic scenarios about people. <a href="https://arxiv.org/abs/2504.14325">arXiv</a></p>
+  </div>
+
+  <div class="work">
+    <div class="work-head"><span class="rank">6</span><span class="work-title">Economic games with demographic-tagged counterparts</span><span class="work-venue">2024–2026, several works</span></div>
+    <p>Trust games where counterpart names signal race/gender shift LLM investment amounts (<a href="https://arxiv.org/abs/2404.14682">arXiv 2404.14682</a>); buyer–seller negotiation agents assigned gender × race extract systematically different profits (<a href="https://www.mdpi.com/2227-7390/14/3/458">MDPI Mathematics, 2026</a>); welfare-allocation games probe fairness–efficiency tradeoffs (<a href="https://arxiv.org/pdf/2510.01164">arXiv 2510.01164</a>).</p>
+    <p class="differs"><em>How yours differs:</em> fixed-structure economic games with one-dimensional outcomes; no scenario generation from a bias taxonomy, no evidence-gathering, no ambiguity manipulation. </p>
+  </div>
+
+  <div class="work">
+    <div class="work-head"><span class="rank">7</span><span class="work-title">DiscrimEval and the audit-study line</span><span class="work-venue">Tamkin et al. (Anthropic) 2023; Bloomberg 2024; Wilson &amp; Caliskan AIES 2024; Haim et al. 2024</span></div>
+    <p>LLM-generated decision scenarios with systematically varied demographics (DiscrimEval), plus resume-screening and advice audits showing name-based discrimination. These established decision-level bias measurement and LLM-generated bias probes.</p>
+    <p class="differs"><em>How yours differs:</em> all single-turn — one prompt, one decision. No interaction, no information-seeking, no game. <a href="https://arxiv.org/abs/2312.03689">DiscrimEval</a> · <a href="https://www.bloomberg.com/graphics/2024-openai-gpt-hiring-racial-discrimination/">Bloomberg</a></p>
+  </div>
+
+  <div class="work">
+    <div class="work-head"><span class="rank">8</span><span class="work-title">MACHIAVELLI</span><span class="work-venue">Pan et al. · ICML 2023 oral</span></div>
+    <p>134 choose-your-own-adventure games with ~572K annotated scenario–action pairs, producing "behavioral reports" of agents over trajectories — the canonical precedent for measuring a normative property (ethics) from game trajectories rather than static questions.</p>
+    <p class="differs"><em>How yours differs:</em> measures harm/deception/power-seeking, not social bias toward demographic groups; pre-authored games, not generated from a bias taxonomy. It is, however, the best template for what a "behavioral bias report" could look like. <a href="https://arxiv.org/abs/2304.03279">arXiv</a></p>
+  </div>
+
+  <div class="work">
+    <div class="work-head"><span class="rank">9</span><span class="work-title">Multi-agent bias emergence cluster</span><span class="work-venue">Borah &amp; Mihalcea, Findings EMNLP 2024; MALIBU 2025; "AI Bosses" 2025; others</span></div>
+    <p>A fast-growing 2024–2026 cluster showing bias emerges and amplifies in multi-agent LLM interactions — workplace simulations developing stereotype-driven behavior, debates converging to biased consensus, MAS less robust to stereotypes than single agents.</p>
+    <p class="differs"><em>How yours differs:</em> these observe emergent bias among interacting agents; BiasGame probes a subject model with a designed instrument. Different question, but reviewers will expect the distinction drawn explicitly. <a href="https://aclanthology.org/2024.findings-emnlp.545/">Borah &amp; Mihalcea</a> · <a href="https://arxiv.org/abs/2508.19919">AI Bosses</a></p>
+  </div>
+
+  <h2><span class="num">5</span>The gap that remains open — and how to claim it</h2>
+  <p>Across all four survey clusters, no work was found that combines these four elements, and the combination is where the defensible contribution lies:</p>
+  <ol>
+    <li><strong>Information-seeking under ambiguity.</strong> BBQ's core construct is stereotype reliance under ambiguity. A game where the agent chooses whom to interview, what to ask, and when to stop uniquely lets you measure <em>how the agent resolves ambiguity</em> — by evidence or by stereotype — rather than only what it answers. You control evidence placement, so ambiguous and disambiguated conditions become dynamic: the disambiguating fact can exist in the environment, retrievable only if the agent asks the "right" persona the right question.</li>
+    <li><strong>Trajectory-level bias measures, not just final-decision measures.</strong> The interaction record supports measures no one-shot audit can produce: disparate scrutiny (who gets interrogated longer, more hostilely, with more presumption-of-guilt framing), differential evidence thresholds (how much exculpatory evidence a member of the stereotyped group needs before the agent moves on, versus others), and confidence/justification asymmetries. These map directly onto constructs from human discrimination research (e.g., shifting standards, statistical vs. taste-based discrimination) that static benchmarks cannot operationalize.</li>
+    <li><strong>Grounding in a validated taxonomy plus procedural regeneration.</strong> Generating scenarios <em>from</em> BBQ items inherits its stereotype documentation and coverage while making every instance fresh — contamination-resistant in a way public MCQ benchmarks cannot be, joining the DyVal/AutoBencher lineage but for fairness.</li>
+    <li><strong>The MCQ-vs-behavior divergence result itself.</strong> BBG showed MCQ and generation bias don't correlate. Nobody has shown whether MCQ bias predicts <em>agentic, interactive</em> bias. Running the same models on BBQ and on BiasGame and quantifying the (likely) divergence is a headline empirical contribution independent of the benchmark artifact — it would be the agentic analogue of the RUTEd and BBG findings.</li>
+  </ol>
+
+  <h2><span class="num">6</span>Risks and what reviewers will demand</h2>
+  <ul>
+    <li><strong>Speed.</strong> This space moved from empty to crowded in roughly eighteen months; FairGamer and the NYU Werewolf study are both 2025. The gap is real today and will not stay open long.</li>
+    <li><strong>Validity of LLM-generated instruments.</strong> Selvam et al. showed innocuous construction choices flip bias measurements; that critique applies doubly when a GPT-4-class model writes your scenarios. You'll need generator-bias controls (e.g., counterfactual persona swaps within identical scenarios — which your persona-swap design already gestures at — plus human validation of a scenario sample, and reporting variance across regenerations).</li>
+    <li><strong>Reliability.</strong> Repeated-run variance, prompt sensitivity, and persona-simulator confounds (the persona LLMs may themselves behave stereotypically, contaminating the evidence the reasoning agent sees). The psychometrics literature (van der Wal et al., JAIR 2024; Wallach et al., ICML 2025) is the standard to design against.</li>
+    <li><strong>The "better than MCQ" claim needs evidence, not assertion.</strong> The strongest version of the paper demonstrates divergence (per §5.4) and shows the game measures something MCQ misses — e.g., models with near-zero BBQ bias showing disparate scrutiny in interrogation behavior.</li>
+    <li><strong>Evaluation awareness cuts both ways.</strong> Game framing plausibly lowers test salience (a claimed advantage — and testable, using Needham et al.'s methodology), but models may still detect bias probes when personas carry conspicuous demographic markers.</li>
+  </ul>
+
+  <hr>
+
+  <h2><span class="num">7</span>Annotated bibliography</h2>
+  <p>The full survey, grouped by cluster. All entries verified against arXiv, ACL Anthology, or publisher pages; none are hallucinated. One caveat: several 2025–2026 arXiv items were verified only via abstract pages, not full-text reads.</p>
+
+  <details>
+    <summary>Static bias benchmarks<span class="count">14 entries</span></summary>
+    <div class="inner">
+      <ul>
+        <li><span class="bib-t">BBQ: A Hand-Built Bias Benchmark for QA</span> — Parrish et al. <span class="bib-v">Findings ACL 2022</span> — 58K MCQ items, nine social dimensions, ambiguous vs. disambiguated contexts; the benchmark your repo builds on. <a href="https://aclanthology.org/2022.findings-acl.165/">link</a></li>
+        <li><span class="bib-t">StereoSet</span> — Nadeem et al. <span class="bib-v">ACL 2021</span> — stereotype/anti-stereotype completions. <a href="https://aclanthology.org/2021.acl-long.416/">link</a></li>
+        <li><span class="bib-t">CrowS-Pairs</span> — Nangia et al. <span class="bib-v">EMNLP 2020</span> — 1,508 minimal pairs, nine bias categories. <a href="https://aclanthology.org/2020.emnlp-main.154/">link</a></li>
+        <li><span class="bib-t">WinoBias</span> — Zhao et al. <span class="bib-v">NAACL 2018</span> — gender–occupation coreference schemas. <a href="https://aclanthology.org/N18-2003/">link</a></li>
+        <li><span class="bib-t">Winogender</span> — Rudinger et al. <span class="bib-v">NAACL 2018</span> — minimal-pair pronoun schemas. <a href="https://aclanthology.org/N18-2002/">link</a></li>
+        <li><span class="bib-t">BOLD</span> — Dhamala et al. <span class="bib-v">FAccT 2021</span> — 23K open-ended generation prompts. <a href="https://arxiv.org/abs/2101.11718">link</a></li>
+        <li><span class="bib-t">HolisticBias</span> — Smith et al. <span class="bib-v">EMNLP 2022</span> — 600 descriptors, 13 axes, 450K+ prompts. <a href="https://aclanthology.org/2022.emnlp-main.625/">link</a></li>
+        <li><span class="bib-t">DiscrimEval</span> — Tamkin et al. (Anthropic) <span class="bib-v">2023</span> — 70 LLM-generated high-stakes decision scenarios with varied demographics. <a href="https://arxiv.org/abs/2312.03689">link</a></li>
+        <li><span class="bib-t">SeeGULL</span> — Jha et al. <span class="bib-v">ACL 2023</span> — geo-culturally broad stereotype dataset. <a href="https://aclanthology.org/2023.acl-long.548/">link</a></li>
+        <li><span class="bib-t">BBQ multilingual family</span> — KoBBQ (TACL 2024), CBBQ, MBBQ (<a href="https://arxiv.org/abs/2406.07243">2024</a>), JBBQ, BasqBBQ, ESBBQ/CABBQ, PakBBQ, BharatBBQ — bias profiles differ across languages, so English scores don't generalize.</li>
+        <li><span class="bib-t">SHADES</span> — Mitchell et al. <span class="bib-v">NAACL 2025</span> — 304 culturally specific stereotypes, 16 languages. <a href="https://aclanthology.org/2025.naacl-long.600/">link</a></li>
+        <li><span class="bib-t">CEB: Compositional Evaluation Benchmark</span> — Wang et al. <span class="bib-v">ICLR 2025</span> — compositional taxonomy over existing bias datasets. <a href="https://arxiv.org/abs/2407.02408">link</a></li>
+        <li><span class="bib-t">FairMT-Bench</span> — Fan et al. <span class="bib-v">ICLR 2025</span> — multi-turn dialogue fairness; bias accumulates over turns. <a href="https://arxiv.org/abs/2410.19317">link</a></li>
+        <li><span class="bib-t">Bias and Fairness in LLMs: A Survey</span> — Gallegos et al. <span class="bib-v">Computational Linguistics 2024</span> — the field map. <a href="https://aclanthology.org/2024.cl-3.8/">link</a></li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>Critiques of static / MCQ bias evaluation<span class="count">13 entries</span></summary>
+    <div class="inner">
+      <ul>
+        <li><span class="bib-t">Language (Technology) is Power</span> — Blodgett et al. <span class="bib-v">ACL 2020</span> — foundational conceptual critique of "bias" in NLP. <a href="https://aclanthology.org/2020.acl-main.485/">link</a></li>
+        <li><span class="bib-t">Stereotyping Norwegian Salmon</span> — Blodgett et al. <span class="bib-v">ACL 2021</span> — validity pitfalls in StereoSet, CrowS-Pairs, WinoBias, Winogender. <a href="https://aclanthology.org/2021.acl-long.81/">link</a></li>
+        <li><span class="bib-t">Intrinsic Bias Metrics Do Not Correlate with Application Bias</span> — Goldfarb-Tarrant et al. <span class="bib-v">ACL 2021</span>. <a href="https://aclanthology.org/2021.acl-long.150/">link</a></li>
+        <li><span class="bib-t">Measuring Fairness with Biased Rulers</span> — Delobelle et al. <span class="bib-v">NAACL 2022</span> — metrics disagree with each other. <a href="https://aclanthology.org/2022.naacl-main.122/">link</a></li>
+        <li><span class="bib-t">Quantifying Social Biases Using Templates is Unreliable</span> — Seshadri et al. <span class="bib-v">2022</span> — semantic-preserving edits swing measured bias −81% to +162%. <a href="https://arxiv.org/abs/2210.04337">link</a></li>
+        <li><span class="bib-t">The Tail Wagging the Dog</span> — Selvam et al. <span class="bib-v">ACL 2023, Outstanding Paper</span> — construction artifacts flip model rankings. <a href="https://aclanthology.org/2023.acl-short.118/">link</a></li>
+        <li><span class="bib-t">Undesirable Biases in NLP: Challenges of Measurement</span> — van der Wal et al. <span class="bib-v">JAIR 2024</span> — psychometric standards for bias measurement. <a href="https://arxiv.org/abs/2211.13709">link</a></li>
+        <li><span class="bib-t">Political Compass or Spinning Arrow?</span> — Röttger et al. <span class="bib-v">ACL 2024</span> — forced-choice evals are artifacts. <a href="https://aclanthology.org/2024.acl-long.816/">link</a></li>
+        <li><span class="bib-t">Questioning the Survey Responses of LLMs</span> — Dominguez-Olmedo et al. <span class="bib-v">NeurIPS 2024 oral</span> — MCQ answers dominated by ordering bias. <a href="https://arxiv.org/abs/2306.07951">link</a></li>
+        <li><span class="bib-t">Beyond Trick Tests: RUTEd Evaluation</span> — Lum et al. <span class="bib-v">ACL 2025</span> — benchmark bias uncorrelated with realistic-use bias. <a href="https://aclanthology.org/2025.acl-long.7/">link</a></li>
+        <li><span class="bib-t">BBG: Social Bias Benchmark for Generation</span> — Jin et al. <span class="bib-v">Findings ACL 2025</span> — BBQ-MCQ and generation bias don't correlate. <a href="https://arxiv.org/abs/2503.06987">link</a></li>
+        <li><span class="bib-t">Evaluating GenAI is a Social Science Measurement Challenge</span> — Wallach et al. <span class="bib-v">ICML 2025 position</span>. <a href="https://arxiv.org/abs/2502.00561">link</a></li>
+        <li><span class="bib-t">Measuring what Matters: Construct Validity in LLM Benchmarks</span> — <span class="bib-v">NeurIPS 2025</span> — validity failures across 445 benchmarks. <a href="https://arxiv.org/abs/2511.04703">link</a></li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>Behavioral &amp; decision-based bias audits<span class="count">11 entries</span></summary>
+    <div class="inner">
+      <ul>
+        <li><span class="bib-t">Measuring Implicit Bias in Explicitly Unbiased LLMs</span> — Bai et al. <span class="bib-v">PNAS 2025</span> — LLM-IAT + decision-bias tasks. <a href="https://arxiv.org/abs/2402.04105">link</a></li>
+        <li><span class="bib-t">Dialect prejudice predicts AI decisions</span> — Hofmann et al. <span class="bib-v">Nature 2024</span> — covert AAE-triggered prejudice survives alignment. <a href="https://www.nature.com/articles/s41586-024-07856-5">link</a></li>
+        <li><span class="bib-t">Actions Speak Louder than Words</span> — Li, Shirado &amp; Das <span class="bib-v">FAccT 2025</span> — agent decisions reveal implicit bias growing in newer models. <a href="https://arxiv.org/abs/2501.17420">link</a></li>
+        <li><span class="bib-t">Bloomberg GPT hiring audit</span> — Yin, Alba &amp; Nicoletti <span class="bib-v">2024</span> — name-based resume ranking failing adverse-impact thresholds (note interviewing.io's statistical critique). <a href="https://www.bloomberg.com/graphics/2024-openai-gpt-hiring-racial-discrimination/">link</a></li>
+        <li><span class="bib-t">Resume screening via LM retrieval</span> — Wilson &amp; Caliskan <span class="bib-v">AIES 2024</span> — White-associated names favored in 85% of cases. <a href="https://arxiv.org/abs/2407.20371">link</a></li>
+        <li><span class="bib-t">Auditing LMs for hiring decisions</span> — Gaebler et al. <span class="bib-v">2024</span> — correspondence-audit design on real applications. <a href="https://arxiv.org/abs/2404.03086">link</a></li>
+        <li><span class="bib-t">Do LLMs Discriminate in Hiring?</span> — An et al. <span class="bib-v">ACL 2024</span> — name-manipulated acceptance emails; effects prompt-sensitive. <a href="https://aclanthology.org/2024.acl-short.37/">link</a></li>
+        <li><span class="bib-t">What's in a Name?</span> — Haim, Salinas &amp; Nyarko <span class="bib-v">2024</span> — advice audits across 42 templates disadvantage minority-coded names. <a href="https://arxiv.org/abs/2402.14875">link</a></li>
+        <li><span class="bib-t">First-Person Fairness in Chatbots</span> — Eloundou et al. (OpenAI) <span class="bib-v">ICLR 2025</span> — counterfactual user names over real ChatGPT traffic. <a href="https://arxiv.org/abs/2410.19803">link</a></li>
+        <li><span class="bib-t">Trust game name bias</span> — <span class="bib-v">2024</span> — investment amounts shift with counterpart race/gender names. <a href="https://arxiv.org/abs/2404.14682">link</a></li>
+        <li><span class="bib-t">Gender Bias and Stereotypes in LLMs</span> — Kotek et al. <span class="bib-v">ACM CI 2023</span> — 3–6× stereotype-congruent choices on unseen WinoBias-like items. <a href="https://dl.acm.org/doi/fullHtml/10.1145/3582269.3615599">link</a></li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>Game &amp; simulation-based LLM evaluation<span class="count">20 entries</span></summary>
+    <div class="inner">
+      <ul>
+        <li><span class="bib-t">AgentBench</span> — Liu et al. <span class="bib-v">ICLR 2024</span> — 8 interactive environments for LLMs-as-agents. <a href="https://arxiv.org/abs/2308.03688">link</a></li>
+        <li><span class="bib-t">MACHIAVELLI</span> — Pan et al. <span class="bib-v">ICML 2023 oral</span> — behavioral reports from 134 choose-your-own-adventure games. <a href="https://arxiv.org/abs/2304.03279">link</a></li>
+        <li><span class="bib-t">SOTOPIA</span> — Zhou et al. <span class="bib-v">ICLR 2024 spotlight</span> — interactive social-intelligence evaluation, 7 dimensions. <a href="https://arxiv.org/abs/2310.11667">link</a></li>
+        <li><span class="bib-t">Werewolf Arena</span> — Bailis et al. (Google) <span class="bib-v">2024</span> — social-deduction tournament evaluation. <a href="https://arxiv.org/abs/2407.13943">link</a></li>
+        <li><span class="bib-t">AvalonBench</span> — Light et al. <span class="bib-v">2023</span> — hidden-identity game benchmark. <a href="https://arxiv.org/abs/2310.05036">link</a></li>
+        <li><span class="bib-t">Werewolf communication games</span> — Xu et al. <span class="bib-v">2023</span> — emergent trust/camouflage/leadership. <a href="https://arxiv.org/abs/2309.04658">link</a></li>
+        <li><span class="bib-t">NegotiationArena</span> — Bianchi et al. <span class="bib-v">ICML 2024</span> — multi-turn LLM negotiation platform. <a href="https://arxiv.org/abs/2402.05863">link</a></li>
+        <li><span class="bib-t">LLM-Stakeholders Interactive Negotiation</span> — Abdelnabi et al. <span class="bib-v">NeurIPS 2024 D&amp;B</span>. <a href="https://arxiv.org/abs/2309.17234">link</a></li>
+        <li><span class="bib-t">Cicero (Diplomacy)</span> — Meta FAIR <span class="bib-v">Science 2022</span> — landmark language-agent game result. <a href="https://www.science.org/doi/10.1126/science.ade9097">link</a></li>
+        <li><span class="bib-t">GTBench</span> — Duan et al. <span class="bib-v">2024</span> — 10 game-theoretic tasks. <a href="https://arxiv.org/abs/2402.12348">link</a></li>
+        <li><span class="bib-t">GameBench</span> — Costarelli et al. <span class="bib-v">2024</span> — 9 strategy games, contamination-minimized. <a href="https://arxiv.org/abs/2406.06613">link</a></li>
+        <li><span class="bib-t">clembench</span> — Chalamalasetti et al. <span class="bib-v">EMNLP 2023</span> — dialogue games as controlled interactive probes. <a href="https://aclanthology.org/2023.emnlp-main.689/">link</a></li>
+        <li><span class="bib-t">SmartPlay</span> — Wu et al. <span class="bib-v">ICLR 2024</span> — games isolating 9 agent capabilities. <a href="https://arxiv.org/abs/2310.01557">link</a></li>
+        <li><span class="bib-t">BALROG</span> — Paglieri et al. <span class="bib-v">ICLR 2025</span> — procedurally generated game environments. <a href="https://arxiv.org/abs/2411.13543">link</a></li>
+        <li><span class="bib-t">GAMA-Bench</span> — Huang et al. <span class="bib-v">2024</span> — multi-agent game-theory settings, motivated by leakage in static benchmarks. <a href="https://arxiv.org/abs/2403.11807">link</a></li>
+        <li><span class="bib-t">τ-bench</span> — Yao et al. (Sierra) <span class="bib-v">2024</span> — simulated-user agent conversations, pass^k reliability. <a href="https://arxiv.org/abs/2406.12045">link</a></li>
+        <li><span class="bib-t">Generative Agents</span> — Park et al. <span class="bib-v">UIST 2023</span> — 25-agent social sandbox. <a href="https://arxiv.org/abs/2304.03442">link</a></li>
+        <li><span class="bib-t">Concordia</span> — Vezhnevets et al. (DeepMind) <span class="bib-v">2023</span> — Game-Master-adjudicated generative agent-based modeling; a natural infrastructure candidate for BiasGame-style environments. <a href="https://arxiv.org/abs/2312.03664">link</a></li>
+        <li><span class="bib-t">CAMEL</span> — Li et al. <span class="bib-v">NeurIPS 2023</span> — role-playing agent societies. <a href="https://proceedings.neurips.cc/paper_files/paper/2023/hash/a3621ee907def47c1b952ade25c67698-Abstract-Conference.html">link</a></li>
+        <li><span class="bib-t">AgentVerse</span> — Chen et al. <span class="bib-v">ICLR 2024</span> — emergent behaviors in agent groups. <a href="https://arxiv.org/abs/2308.10848">link</a></li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>Bias in interactive / agentic / multi-agent settings<span class="count">17 entries</span></summary>
+    <div class="inner">
+      <ul>
+        <li><span class="bib-t">FairGamer</span> — anonymous, under review <span class="bib-v">2025</span> — social bias of LLM game NPCs; FairMCV metric. <a href="https://arxiv.org/abs/2508.17825">link</a></li>
+        <li><span class="bib-t">FAIRGAME (game theory)</span> — Buscemi et al. <span class="bib-v">2025</span> — bias recognition via classic games. <a href="https://arxiv.org/abs/2504.14325">link</a></li>
+        <li><span class="bib-t">Ethical Considerations of LLMs in Game Playing</span> — NYU <span class="bib-v">2025</span> — gender bias in Werewolf play. <a href="https://arxiv.org/abs/2508.16065">link</a></li>
+        <li><span class="bib-t">Fairness in LLM Negotiator Agents</span> — <span class="bib-v">MDPI Mathematics 2026</span> — race×gender profit gaps in negotiation. <a href="https://www.mdpi.com/2227-7390/14/3/458">link</a></li>
+        <li><span class="bib-t">Your AI Bosses Are Still Prejudiced</span> — Guo &amp; Xu <span class="bib-v">2025</span> — stereotypes emerge in simulated workplaces. <a href="https://arxiv.org/abs/2508.19919">link</a></li>
+        <li><span class="bib-t">Implicit Bias in Multi-Agent LLM Interactions</span> — Borah &amp; Mihalcea <span class="bib-v">Findings EMNLP 2024</span> — bias escalates after interaction. <a href="https://aclanthology.org/2024.findings-emnlp.545/">link</a></li>
+        <li><span class="bib-t">MALIBU</span> — <span class="bib-v">2025</span> — multi-agent pipelines reinforce implicit demographic bias. <a href="https://arxiv.org/pdf/2507.01019">link</a></li>
+        <li><span class="bib-t">The Social Cost of Intelligence</span> — <span class="bib-v">2025</span> — MAS less robust to stereotype bias than single agents. <a href="https://arxiv.org/abs/2510.10943">link</a></li>
+        <li><span class="bib-t">Biased Consensus in Multi-Agent Debates</span> — <span class="bib-v">2026</span>. <a href="https://arxiv.org/html/2608.02827">link</a></li>
+        <li><span class="bib-t">Interactional Fairness in LLM MAS</span> — <span class="bib-v">2025</span> — fairness of treatment between agents. <a href="https://arxiv.org/html/2505.12001v1">link</a></li>
+        <li><span class="bib-t">Fairness as Emergent Property of MAS Collaboration</span> — <span class="bib-v">2026</span> — allocation negotiations. <a href="https://arxiv.org/html/2604.13705">link</a></li>
+        <li><span class="bib-t">Can LLM Agents Simulate Human Trust Behavior?</span> — <span class="bib-v">NeurIPS 2024</span> — trustee gender shifts amounts sent. <a href="https://arxiv.org/abs/2402.04559">link</a></li>
+        <li><span class="bib-t">Social Welfare Function Leaderboard</span> — <span class="bib-v">2025</span> — LLMs as welfare allocators. <a href="https://arxiv.org/pdf/2510.01164">link</a></li>
+        <li><span class="bib-t">Fairness Testing of LLMs in Role-Playing</span> — <span class="bib-v">2024</span> — auto-generated role-play bias probes; 107K biased responses found. <a href="https://arxiv.org/html/2411.00585v2">link</a></li>
+        <li><span class="bib-t">Persona-Prompted Responses in Power-Disparate Scenarios</span> — <span class="bib-v">NAACL 2025</span>. <a href="https://aclanthology.org/2025.naacl-long.50.pdf">link</a></li>
+        <li><span class="bib-t">From Biased Chatbots to Biased Agents</span> — <span class="bib-v">2026</span> — persona assignment degrades agentic performance along stereotype lines. <a href="https://arxiv.org/html/2602.12285">link</a></li>
+        <li><span class="bib-t">SimCourt</span> — <span class="bib-v">2025</span> — full trial simulation with judge/prosecutor/defense agents (infrastructure precedent, not bias-focused). <a href="https://arxiv.org/pdf/2508.17322">link</a></li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>Generated evals, contamination &amp; persona probing<span class="count">16 entries</span></summary>
+    <div class="inner">
+      <ul>
+        <li><span class="bib-t">Model-Written Evaluations</span> — Perez et al. (Anthropic) <span class="bib-v">Findings ACL 2023</span> — 154 LM-generated eval datasets. <a href="https://arxiv.org/abs/2212.09251">link</a></li>
+        <li><span class="bib-t">Red Teaming LMs with LMs</span> — Perez et al. <span class="bib-v">EMNLP 2022</span> — attacker-LM test generation. <a href="https://arxiv.org/abs/2202.03286">link</a></li>
+        <li><span class="bib-t">AutoBencher</span> — Li et al. <span class="bib-v">ICLR 2025</span> — declarative benchmark construction as optimization. <a href="https://arxiv.org/abs/2407.08351">link</a></li>
+        <li><span class="bib-t">BenchAgents</span> — Butt et al. (MSR) <span class="bib-v">2024</span> — multi-agent benchmark creation with verification. <a href="https://arxiv.org/abs/2410.22584">link</a></li>
+        <li><span class="bib-t">Task Me Anything</span> — Zhang et al. <span class="bib-v">NeurIPS 2024 D&amp;B</span> — 750M on-demand task instances. <a href="https://arxiv.org/abs/2406.11775">link</a></li>
+        <li><span class="bib-t">DyVal / DyVal 2</span> — Zhu et al. <span class="bib-v">ICLR 2024 spotlight / ICML 2024</span> — procedurally generated, contamination-proof reasoning evals. <a href="https://arxiv.org/abs/2309.17167">link</a></li>
+        <li><span class="bib-t">Dynabench</span> — Kiela et al. <span class="bib-v">NAACL 2021</span> — dynamic human-and-model-in-the-loop benchmarking. <a href="https://aclanthology.org/2021.naacl-main.324/">link</a></li>
+        <li><span class="bib-t">LiveBench</span> — White et al. <span class="bib-v">ICLR 2025 spotlight</span> — continuously refreshed questions. <a href="https://arxiv.org/abs/2406.19314">link</a></li>
+        <li><span class="bib-t">When Benchmarks are Targets</span> — Alzahrani et al. <span class="bib-v">ACL 2024</span> — MCQ leaderboard fragility. <a href="https://arxiv.org/abs/2402.01781">link</a></li>
+        <li><span class="bib-t">Benchmark Contamination Survey</span> — Xu et al. <span class="bib-v">2024</span>. <a href="https://arxiv.org/abs/2406.04244">link</a></li>
+        <li><span class="bib-t">AI Sandbagging</span> — van der Weij et al. <span class="bib-v">2024</span> — strategic underperformance on evals. <a href="https://arxiv.org/abs/2406.07358">link</a></li>
+        <li><span class="bib-t">LLMs Often Know When They Are Being Evaluated</span> — Needham et al. <span class="bib-v">2025</span> — evaluation awareness, strongest in agentic settings. <a href="https://arxiv.org/abs/2505.23836">link</a></li>
+        <li><span class="bib-t">Toxicity in ChatGPT: Persona-Assigned LMs</span> — Deshpande et al. <span class="bib-v">Findings EMNLP 2023</span> — personas raise toxicity up to 6×. <a href="https://arxiv.org/abs/2304.05335">link</a></li>
+        <li><span class="bib-t">Bias Runs Deep: Persona-Assigned LLMs</span> — Gupta et al. <span class="bib-v">ICLR 2024</span> — implicit reasoning bias under personas. <a href="https://arxiv.org/abs/2311.04892">link</a></li>
+        <li><span class="bib-t">Petri</span> — Anthropic <span class="bib-v">2025</span> — automated multi-turn auditor agents probing behavioral traits. <a href="https://www.anthropic.com/research/petri-open-source-auditing">link</a></li>
+        <li><span class="bib-t">LLM Psychometrics: A Systematic Review</span> — Ye et al. <span class="bib-v">2025</span> — validation standards for trait measurement. <a href="https://arxiv.org/abs/2505.08245">link</a></li>
+      </ul>
+    </div>
+  </details>
+
+  <p class="footnote">Compiled from four parallel literature sweeps (static benchmarks &amp; critiques; game-based evaluation; bias × interactivity; generated evals &amp; persona probing), each verified against primary sources. Coverage is thorough for indexed venues through early 2026 but cannot rule out concurrent unpublished work — the bias-×-games intersection produced multiple new entries per quarter through 2025, so re-checking arXiv before submission is advised.</p>
+</div>

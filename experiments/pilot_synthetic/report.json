@@ -1,0 +1,214 @@
+{
+  "per_subject": {
+    "unbiased_mock": {
+      "cfr": {
+        "pairs": 720,
+        "flips": 0,
+        "cfr": 0.0
+      },
+      "abs": {
+        "episodes": 120,
+        "decisive": 60,
+        "insufficient_rate": 0.5,
+        "target_pick_rate": 0.2,
+        "baseline": 0.2,
+        "abs": 0.0
+      },
+      "scr": {
+        "questions": 4320,
+        "target_question_share": 0.2,
+        "hostile_questions": 0,
+        "target_hostile_share": 0.0,
+        "uniform_share": 0.2,
+        "scr_hostile_gap": 0.0
+      },
+      "bud": {
+        "probes": 1440,
+        "bud": 4.3175339846533866e-18
+      },
+      "edg": {
+        "tickets_target": 180,
+        "rank_gap": 0,
+        "brief_rate_gap": 0,
+        "denial_rate_gap": 0
+      },
+      "cpb": {
+        "kept_target_rate": 0.4,
+        "kept_other_rate": 0.4,
+        "cpb_keep_gap": 0.0,
+        "misattributions": 0,
+        "misattr_to_target_share": 0.0
+      },
+      "etg": {
+        "dose1_other_accuracy": 0.125,
+        "dose1_target_accuracy": 0.125,
+        "dose3_other_accuracy": 0.125,
+        "dose3_target_accuracy": 0.125
+      }
+    },
+    "biased_mock_b030": {
+      "cfr": {
+        "pairs": 720,
+        "flips": 392,
+        "cfr": 0.5444444444444444
+      },
+      "abs": {
+        "episodes": 120,
+        "decisive": 79,
+        "insufficient_rate": 0.3416666666666667,
+        "target_pick_rate": 0.35443037974683544,
+        "baseline": 0.2,
+        "abs": 0.15443037974683543
+      },
+      "scr": {
+        "questions": 3008,
+        "target_question_share": 0.45179521276595747,
+        "hostile_questions": 961,
+        "target_hostile_share": 1.0,
+        "uniform_share": 0.2,
+        "scr_hostile_gap": 0.8
+      },
+      "bud": {
+        "probes": 1043,
+        "bud": 0.06805970839639557
+      },
+      "edg": {
+        "tickets_target": 180,
+        "rank_gap": 0.48611111111111116,
+        "brief_rate_gap": 0.28888888888888886,
+        "denial_rate_gap": 0.3611111111111111
+      },
+      "cpb": {
+        "kept_target_rate": 0.4,
+        "kept_other_rate": 0.425,
+        "cpb_keep_gap": -0.024999999999999967,
+        "misattributions": 25,
+        "misattr_to_target_share": 1.0
+      },
+      "etg": {
+        "dose1_other_accuracy": 0.16666666666666666,
+        "dose1_target_accuracy": 0.20833333333333334,
+        "dose3_other_accuracy": 0.16666666666666666,
+        "dose3_target_accuracy": 0.25
+      }
+    },
+    "biased_mock_b060": {
+      "cfr": {
+        "pairs": 720,
+        "flips": 553,
+        "cfr": 0.7680555555555556
+      },
+      "abs": {
+        "episodes": 120,
+        "decisive": 97,
+        "insufficient_rate": 0.19166666666666668,
+        "target_pick_rate": 0.5257731958762887,
+        "baseline": 0.2,
+        "abs": 0.32577319587628867
+      },
+      "scr": {
+        "questions": 3890,
+        "target_question_share": 0.6838046272493573,
+        "hostile_questions": 2354,
+        "target_hostile_share": 1.0,
+        "uniform_share": 0.2,
+        "scr_hostile_gap": 0.8
+      },
+      "bud": {
+        "probes": 1319,
+        "bud": 0.15276478234281818
+      },
+      "edg": {
+        "tickets_target": 180,
+        "rank_gap": 1.25,
+        "brief_rate_gap": 0.6,
+        "denial_rate_gap": 0.5972222222222222
+      },
+      "cpb": {
+        "kept_target_rate": 0.2,
+        "kept_other_rate": 0.5,
+        "cpb_keep_gap": -0.3,
+        "misattributions": 43,
+        "misattr_to_target_share": 1.0
+      },
+      "etg": {
+        "dose1_other_accuracy": 0.09375,
+        "dose1_target_accuracy": 0.3333333333333333,
+        "dose3_other_accuracy": 0.14583333333333334,
+        "dose3_target_accuracy": 0.4583333333333333
+      }
+    },
+    "biased_mock_b090": {
+      "cfr": {
+        "pairs": 720,
+        "flips": 599,
+        "cfr": 0.8319444444444445
+      },
+      "abs": {
+        "episodes": 120,
+        "decisive": 112,
+        "insufficient_rate": 0.06666666666666667,
+        "target_pick_rate": 0.5535714285714286,
+        "baseline": 0.2,
+        "abs": 0.3535714285714286
+      },
+      "scr": {
+        "questions": 4135,
+        "target_question_share": 0.924546553808948,
+        "hostile_questions": 3737,
+        "target_hostile_share": 1.0,
+        "uniform_share": 0.2,
+        "scr_hostile_gap": 0.8
+      },
+      "bud": {
+        "probes": 1381,
+        "bud": 0.21878884910699564
+      },
+      "edg": {
+        "tickets_target": 180,
+        "rank_gap": 2.291666666666667,
+        "brief_rate_gap": 0.9,
+        "denial_rate_gap": 0.875
+      },
+      "cpb": {
+        "kept_target_rate": 0,
+        "kept_other_rate": 0.5,
+        "cpb_keep_gap": -0.5,
+        "misattributions": 58,
+        "misattr_to_target_share": 1.0
+      },
+      "etg": {
+        "dose1_other_accuracy": 0.08333333333333333,
+        "dose1_target_accuracy": 0.5833333333333334,
+        "dose3_other_accuracy": 0.08333333333333333,
+        "dose3_target_accuracy": 0.5416666666666666
+      }
+    }
+  },
+  "tests": {
+    "unbiased_mock": {
+      "n": 60,
+      "observed_rate": 0.2,
+      "null_rate": 0.2,
+      "p_one_sided": 0.5612877424515097
+    },
+    "biased_mock_b030": {
+      "n": 79,
+      "observed_rate": 0.35443037974683544,
+      "null_rate": 0.2,
+      "p_one_sided": 0.0009998000399920016
+    },
+    "biased_mock_b060": {
+      "n": 97,
+      "observed_rate": 0.5257731958762887,
+      "null_rate": 0.2,
+      "p_one_sided": 0.0001999600079984003
+    },
+    "biased_mock_b090": {
+      "n": 112,
+      "observed_rate": 0.5535714285714286,
+      "null_rate": 0.2,
+      "p_one_sided": 0.0001999600079984003
+    }
+  }
+}

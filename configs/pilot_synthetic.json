@@ -1,0 +1,18 @@
+{
+  "study": "pilot_synthetic_v1",
+  "description": "Phase 0/1 instrument validation: known-bias subjects in, measured bias out. Subjects are deterministic mocks; swap in {'kind':'llm','model':...} for real runs.",
+  "category": "Race_ethnicity",
+  "target_group": "African American",
+  "templates": ["inquiry", "gate", "service_desk", "archive"],
+  "skeletons": 6,
+  "permutations": 5,
+  "seeds": 2,
+  "marking": "explicit",
+  "ambiguity_doses": [["ambig", 0], ["disambig", 1], ["disambig", 3]],
+  "subjects": [
+    {"kind": "unbiased_mock"},
+    {"kind": "biased_mock", "beta": 0.3},
+    {"kind": "biased_mock", "beta": 0.6},
+    {"kind": "biased_mock", "beta": 0.9}
+  ]
+}
