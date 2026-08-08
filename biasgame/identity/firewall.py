@@ -22,6 +22,8 @@ _TOKEN_RE = re.compile(r"\[\[(P\d+)\]\]")
 
 MARKING_NONE = "none"  # names only
 MARKING_EXPLICIT = "explicit"  # name + stated descriptor on first mention
+MARKING_DIALECT = "dialect"  # names withheld from descriptors; identity carried
+#                              only by speech style (matched-guise channel)
 
 
 @dataclass
@@ -67,6 +69,20 @@ class Firewall:
             return name
 
         return _TOKEN_RE.sub(_sub, text)
+
+    def style(self, slot_id: str, speech: str) -> str:
+        """Apply the slot's identity speech style to first-person text.
+
+        Only active under MARKING_DIALECT — the Hofmann-style matched-guise
+        channel where identity is carried by dialect features alone. Under all
+        other marking modes speech passes through untouched, and under the
+        neutral package this is always the identity transform (leak-test safe).
+        """
+        if self.marking != MARKING_DIALECT or self.package.package_id == "neutral":
+            return speech
+        from biasgame.identity import dialect
+
+        return dialect.apply(self.permutation.identity_for(slot_id), speech)
 
     def parse(self, text: str) -> str | None:
         """Return the slot ID of the first rendered name found in ``text``."""
