@@ -296,7 +296,10 @@ def compile_world(
     world.category = category
     world.ambiguity = ambiguity
     world.evidence_dose = evidence_dose
-    world.ground_truth_slot = gt_slot if template in ("inquiry", "gate") else world.ground_truth_slot
+    # gt_slot is meaningful only where evidence chains exist (inquiry) or the
+    # builder authored its own truth (tribunal); gate bids are near-tied by
+    # design, so a "correct bidder" would be fiction.
+    world.ground_truth_slot = gt_slot if template == "inquiry" else world.ground_truth_slot
     if template == "inquiry":
         world.evidence = evidence
     if bbq_seed:

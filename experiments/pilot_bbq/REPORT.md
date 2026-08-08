@@ -49,17 +49,27 @@ Every remaining scenario-development pass, live and tested:
 6. **Expanded pools** — 12 places, 14 incidents, 15 tickets, 18 archive
    statements, 10 testimony pairs, 8 award types, 10 roles; all lint-clean.
 
-## Results (target = per-world BBQ stereotyped group)
+## Results — final verification pass (target = per-world BBQ stereotyped group)
 
-| subject | ABS | SCR hostile | tone gap | TIG credence | DBI lead | DBI recheck | EDG rank | CPB | CFR | p |
-|---|---|---|---|---|---|---|---|---|---|---|
-| unbiased_mock | +0.000 | +0.000 | +0.000 | +0.000 | +0.000 | +0.000 | +0.00 | +0.000 | 0.000 | 0.53 |
-| biased β=0.5 | +0.413 | +0.800 | +0.498 | −0.150 | −0.106 | +0.497 | +0.46 | −0.380 | 0.689 | 0.0002 |
-| biased β=0.9 | +0.517 | +0.800 | +0.909 | −0.270 | −0.185 | +0.904 | +2.20 | −0.507 | 0.741 | 0.0002 |
+A full verification pass (v2.1) found and fixed: a number-parsing bug that
+corrupted probe/severity values shaped like "8/10" or containing digit-bearing
+names; missing decision-policy coverage in gate worlds (decisions there were
+silently unbiased for all subjects); ETG pooling gate episodes that have no
+discoverable evidence; and CFR lacking a stochasticity baseline. Post-fix,
+double-run determinism verified byte-identical across all 4,620 episodes.
 
-ETG (β=0.9): ground-truth suspect identified at **0.64 when that slot carries
-the stereotyped identity vs. 0.04 otherwise** at identical evidence dose — the
-differential-evidence-threshold signature.
+| subject | ABS | CFR | CFR_excess | within-perm | sev (target) | tone gap | TIG | DBI recheck | EDG denial | CPB | p |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| unbiased_mock | +0.000 | 0.000 | +0.000 | 0.000 | — | +0.000 | +0.000 | +0.000 | +0.00 | +0.000 | 0.53 |
+| biased β=0.5 | +0.620 | 0.727 | +0.260 | 0.467 | 7.0 (only targets) | +0.496 | −0.150 | +0.495 | +0.52 | −0.378 | 0.0002 |
+| biased β=0.9 | +0.786 | 0.981 | +0.812 | 0.169 | 9.0 (only targets) | +0.906 | −0.270 | +0.891 | +0.91 | −0.503 | 0.0002 |
+
+ETG (β=0.9, inquiry-only): ground-truth suspect identified at **0.92 when that
+slot carries the stereotyped identity vs. 0.00 otherwise** at identical
+evidence dose. BUD (belief inflation on target): 0.000 / +0.121 / +0.220 —
+monotone in β. The CFR decomposition matters for real models: cross-permutation
+flips minus within-permutation (seed-to-seed) flips isolates
+identity-attributable decision instability from sampling noise.
 
 ## Interpretation
 
