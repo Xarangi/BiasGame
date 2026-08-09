@@ -88,6 +88,11 @@ class UnbiasedMock:
     def begin(self, briefing: str) -> None:
         self.context.append(briefing)
 
+    def fork(self):
+        """Fresh copy with the same policy parameters and empty context — the
+        vehicle for context-surgery replays."""
+        return type(self)(seed=self.seed)
+
     def choose(self, prompt: str, options: list[str]) -> str:
         self._counter += 1
         rng = keyed_rng(self.name, self.seed, self._counter, prompt)
@@ -135,22 +140,58 @@ class UnbiasedMock:
             return ", ".join(ids[:4])
         if "who reported" in prompt.lower():
             return "I am not certain."
+        if "answer strictly yes or no" in prompt.lower():
+            # Explicit probe: the identity-blind mock truthfully denies.
+            return "NO."
         return "Understood."
 
 
 class BiasedMock(UnbiasedMock):
-    """Identity-conditioned policy with tunable bias strength beta."""
+    """Identity-conditioned policy with tunable bias strength beta.
 
-    def __init__(self, beta: float, category: str, seed: int = 0, target_group: str | None = None):
+    ``gamma`` adds context-length drift: effective bias grows with accumulated
+    context (FairMT-Bench-style within-trajectory accumulation), giving the
+    horizon study a synthetic ground truth — gamma=0 must yield a flat
+    bias-vs-horizon curve, gamma>0 a rising one.
+
+    The explicit probe is answered "NO" regardless of beta: the mock models
+    the documented real-model pattern of implicit bias behind explicit
+    egalitarianism (Actions Speak Louder, FAccT 2025), so the EIG measure has
+    a known positive ground truth to recover.
+    """
+
+    def __init__(
+        self,
+        beta: float,
+        category: str,
+        seed: int = 0,
+        target_group: str | None = None,
+        gamma: float = 0.0,
+    ):
         super().__init__(seed)
         self.beta = beta
+        self.gamma = gamma
+        self.category = category
         # Per-world target (from BBQ seed metadata) wins over the category default.
         self.target_group = target_group or MOCK_TARGET_GROUPS.get(category)
-        self.name = f"biased_mock_b{int(beta * 100):03d}"
+        self.name = f"biased_mock_b{int(beta * 100):03d}" + (
+            f"_g{int(gamma * 100):03d}" if gamma else ""
+        )
+
+    def fork(self):
+        return BiasedMock(
+            self.beta, self.category, self.seed,
+            target_group=self.target_group, gamma=self.gamma,
+        )
 
     # -- helpers -----------------------------------------------------------
     def _is_target(self, text: str) -> bool:
         return self.target_group is not None and group_of_text(text) == self.target_group
+
+    def _beta_eff(self) -> float:
+        if not self.gamma:
+            return self.beta
+        return min(1.0, self.beta * (1.0 + self.gamma * len(self.context) / 10.0))
 
     def _roll(self, salt: object) -> bool:
         # Salt with the accumulated context so draws are independent across
@@ -159,7 +200,7 @@ class BiasedMock(UnbiasedMock):
         self._counter += 1
         ctx = "\x1e".join(self.context)
         rng = keyed_rng(self.name, self.seed, self._counter, salt, ctx)
-        return rng.random() < self.beta
+        return rng.random() < self._beta_eff()
 
     # -- policy ------------------------------------------------------------
     def choose(self, prompt: str, options: list[str]) -> str:
@@ -249,7 +290,7 @@ class BiasedMock(UnbiasedMock):
                     if group == self.target_group:
                         return name.title()
             return "I am not certain."
-        return "Understood."
+        return super().free_answer(prompt)
 
 
 class LLMSubject:
@@ -291,6 +332,11 @@ class LLMSubject:
 
     def begin(self, briefing: str) -> None:
         self.messages.append({"role": "user", "content": briefing})
+
+    def fork(self):
+        """Fresh conversation with the same model/temperature — used by
+        context surgery to replay a sanitized history."""
+        return LLMSubject(self.model, self.temperature)
 
     def choose(self, prompt: str, options: list[str]) -> str:
         menu = "\n".join(f"{i + 1}. {o}" for i, o in enumerate(options))

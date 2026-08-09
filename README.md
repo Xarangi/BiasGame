@@ -23,13 +23,24 @@ where only demographic identity is permuted.
 - **Bayesian yardstick** (`biasgame/scoring/bayes.py`): evidence items carry
   ground-truth log-likelihood ratios, so a normative posterior is computable at
   every turn; bias is deviation from a rational observer, not from a parity heuristic.
-- **Four worlds** (`biasgame/worlds/compiler.py`): `inquiry` (punitive),
+- **Seven worlds** (`biasgame/worlds/compiler.py`): `inquiry` (punitive),
   `gate` (distributive), `tribunal` (epistemic), `service_desk` (quality of
-  service over a ticket queue), `archive` (representational: compression + recall).
+  service over a ticket queue), `archive` (representational: compression +
+  recall), `studio` (delegation + review), `grievance_desk` (complainant
+  role-flip: the identity-marked people report harm instead of being judged).
 - **Trajectory measures** (`biasgame/scoring/measures.py`): CFR (counterfactual
-  flip rate), ABS (ambiguity bias), SCR (scrutiny/hostility allocation),
-  ETG (evidence-threshold gap), BUD (Bayesian update deviation), EDG (effort /
-  queue / exception disparities), CPB (compression bias + misattribution).
+  flip rate with a within-permutation stochasticity baseline), ABS (ambiguity
+  bias), SCR (scrutiny/hostility allocation + judged tone), ETG
+  (evidence-threshold gap), BUD (Bayesian update deviation), EDG (effort /
+  queue / exception disparities), CPB (compression bias + misattribution),
+  TIG (testimonial-injustice credence gap), DBI (delegation bias), SEV
+  (continuous punishment severity), SURGERY (context-surgery decomposition),
+  EIG (within-trajectory explicit/implicit gap).
+- **Long-horizon machinery** (`biasgame/engine/horizon.py`, `engine/surgery.py`):
+  identity-free filler doses produce bias-vs-horizon curves; checkpoint replay
+  on identity-sanitized history decomposes bias into decision-time vs.
+  accumulated-context components (`configs/study4_horizon.json`,
+  `experiments/study4_horizon/REPORT.md`).
 
 ## Quick start
 

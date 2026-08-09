@@ -32,7 +32,8 @@ def build_subject(spec: dict, category: str, seed: int, target_group: str | None
         return UnbiasedMock(seed=seed)
     if kind == "biased_mock":
         return BiasedMock(
-            beta=spec["beta"], category=category, seed=seed, target_group=target_group
+            beta=spec["beta"], category=category, seed=seed,
+            target_group=target_group, gamma=spec.get("gamma", 0.0),
         )
     if kind == "llm":
         return LLMSubject(model=spec["model"], temperature=spec.get("temperature", 0.7))
@@ -87,34 +88,45 @@ def run_study(config: dict, out_dir: pathlib.Path) -> dict:
                     f"LINT FAILURE in {world.world_id}: {violations[:3]}"
                 )
             perms = latin_square(world.slot_ids(), package)[: config["permutations"]]
+            # Horizon manipulation only exists in interview-family runners;
+            # other templates would silently duplicate episodes across horizons.
+            horizons = (
+                config.get("horizons", [0])
+                if template in ("inquiry", "gate", "tribunal")
+                else [0]
+            )
             for perm in perms:
                 for subj_spec in config["subjects"]:
                     for seed in range(config["seeds"]):
-                        world_target = (
-                            world.bbq_meta.get("target_group") or target_group
-                        )
-                        subject = build_subject(
-                            subj_spec, category, seed, target_group=world_target
-                        )
-                        fw = Firewall(
-                            package=package,
-                            permutation=perm,
-                            world_id=world.world_id,
-                            marking=config.get("marking", "explicit"),
-                        )
-                        log = RUNNERS[template](
-                            world, fw, subject, subject.name, seed,
-                            phrase_questions=config.get("phrase_questions", False),
-                        )
-                        fname = (
-                            f"{world.world_id}--{perm.permutation_id}--"
-                            f"{subject.name}--s{seed}.jsonl"
-                        )
-                        (out_dir / "episodes" / fname).write_text(log.to_jsonl())
-                        manifest["episodes"].append(fname)
-                        logs_by_subject.setdefault(subject.name, []).append(
-                            parse_jsonl(log.to_jsonl())
-                        )
+                        for horizon in horizons:
+                            world_target = (
+                                world.bbq_meta.get("target_group") or target_group
+                            )
+                            subject = build_subject(
+                                subj_spec, category, seed, target_group=world_target
+                            )
+                            fw = Firewall(
+                                package=package,
+                                permutation=perm,
+                                world_id=world.world_id,
+                                marking=config.get("marking", "explicit"),
+                            )
+                            log = RUNNERS[template](
+                                world, fw, subject, subject.name, seed,
+                                phrase_questions=config.get("phrase_questions", False),
+                                horizon_filler=horizon,
+                                surgery=config.get("surgery", False),
+                                explicit_probe=config.get("explicit_probe", False),
+                            )
+                            fname = (
+                                f"{world.world_id}--{perm.permutation_id}--"
+                                f"{subject.name}--s{seed}--h{horizon}.jsonl"
+                            )
+                            (out_dir / "episodes" / fname).write_text(log.to_jsonl())
+                            manifest["episodes"].append(fname)
+                            logs_by_subject.setdefault(subject.name, []).append(
+                                parse_jsonl(log.to_jsonl())
+                            )
 
     report: dict = {"per_subject": {}, "tests": {}}
     for subject_name, logs in logs_by_subject.items():
@@ -125,6 +137,20 @@ def run_study(config: dict, out_dir: pathlib.Path) -> dict:
             except Exception as exc:  # a measure not applicable to these templates
                 results[mname] = {"error": str(exc)}
         report["per_subject"][subject_name] = results
+
+    # Bias-horizon curves: the same measures stratified by horizon dose.
+    if len(config.get("horizons", [0])) > 1:
+        report["per_subject_horizon"] = {}
+        for subject_name, logs in logs_by_subject.items():
+            by_h: dict[int, list[dict]] = {}
+            for log in logs:
+                by_h.setdefault(log["meta"].get("horizon_filler", 0), []).append(log)
+            for h, lg in sorted(by_h.items()):
+                report["per_subject_horizon"][f"{subject_name}|h{h}"] = {
+                    "abs": MEASURES["abs"](lg, target_group),
+                    "surgery": MEASURES["surgery"](lg, target_group),
+                    "eig": MEASURES["eig"](lg, target_group),
+                }
 
     # Permutation test on ABS target-pick indicator: is the target-identity
     # pick rate higher than identity-shuffled chance, per subject?

@@ -1,0 +1,479 @@
+{
+  "per_subject": {
+    "unbiased_mock": {
+      "cfr": {
+        "pairs": 2520,
+        "cfr": 0.0,
+        "within_perm_pairs": 900,
+        "within_perm_flip_rate": 0.0,
+        "cfr_excess": 0.0
+      },
+      "abs": {
+        "episodes": 360,
+        "decisive": 0,
+        "insufficient_rate": 1.0,
+        "target_pick_rate": 0.0,
+        "unconditional_target_rate": 0.0,
+        "baseline": 0.2,
+        "abs": -0.2
+      },
+      "scr": {
+        "questions": 4320,
+        "target_question_share": 0.2,
+        "hostile_questions": 0,
+        "target_hostile_share": 0.0,
+        "uniform_share": 0.2,
+        "scr_hostile_gap": 0.0
+      },
+      "bud": {
+        "probes": 1440,
+        "bud": 0.0
+      },
+      "edg": {
+        "tickets_target": 0,
+        "rank_gap": 0.0,
+        "brief_rate_gap": 0.0,
+        "denial_rate_gap": 0.0
+      },
+      "cpb": {
+        "kept_target_rate": 0.0,
+        "kept_other_rate": 0.0,
+        "cpb_keep_gap": 0.0,
+        "misattributions": 0,
+        "misattr_to_target_share": 0.0
+      },
+      "etg": {},
+      "tig": {
+        "ratings_target": 0,
+        "tig_credence_gap": 0.0,
+        "tig_true_account_gap": 0.0
+      },
+      "dbi": {
+        "assignments": 0,
+        "target_lead_share": 0.0,
+        "uniform_share": 0.2,
+        "dbi_lead_gap": 0.0,
+        "dbi_recheck_solid_gap": 0.0
+      },
+      "sev": {
+        "sentenced_target": 0,
+        "sentenced_other": 0,
+        "sev_target_mean": null,
+        "sev_other_mean": null,
+        "sev_gap": null,
+        "only_target_sentenced": false
+      },
+      "surgery": {
+        "episodes": 360,
+        "original_target_rate": 0.0,
+        "sanitized_target_rate": 0.0,
+        "decision_time_component": 0.0,
+        "accumulated_component_vs_chance": -0.2,
+        "flip_rate": 0.0
+      },
+      "eig": {
+        "explicit_probes": 360,
+        "explicit_admission_rate": 0.0,
+        "implicit_abs": 0.0,
+        "eig": null
+      }
+    },
+    "biased_mock_b030": {
+      "cfr": {
+        "pairs": 2520,
+        "cfr": 0.4646825396825397,
+        "within_perm_pairs": 900,
+        "within_perm_flip_rate": 0.4077777777777778,
+        "cfr_excess": 0.0569047619047619
+      },
+      "abs": {
+        "episodes": 360,
+        "decisive": 99,
+        "insufficient_rate": 0.725,
+        "target_pick_rate": 1.0,
+        "unconditional_target_rate": 0.275,
+        "baseline": 0.2,
+        "abs": 0.8
+      },
+      "scr": {
+        "questions": 2937,
+        "target_question_share": 0.45556690500510727,
+        "hostile_questions": 960,
+        "target_hostile_share": 1.0,
+        "uniform_share": 0.2,
+        "scr_hostile_gap": 0.8
+      },
+      "bud": {
+        "probes": 1026,
+        "bud": 0.07
+      },
+      "edg": {
+        "tickets_target": 0,
+        "rank_gap": 0.0,
+        "brief_rate_gap": 0.0,
+        "denial_rate_gap": 0.0
+      },
+      "cpb": {
+        "kept_target_rate": 0.0,
+        "kept_other_rate": 0.0,
+        "cpb_keep_gap": 0.0,
+        "misattributions": 0,
+        "misattr_to_target_share": 0.0
+      },
+      "etg": {},
+      "tig": {
+        "ratings_target": 0,
+        "tig_credence_gap": 0.0,
+        "tig_true_account_gap": 0.0
+      },
+      "dbi": {
+        "assignments": 0,
+        "target_lead_share": 0.0,
+        "uniform_share": 0.2,
+        "dbi_lead_gap": 0.0,
+        "dbi_recheck_solid_gap": 0.0
+      },
+      "sev": {
+        "sentenced_target": 99,
+        "sentenced_other": 0,
+        "sev_target_mean": 6.0,
+        "sev_other_mean": null,
+        "sev_gap": null,
+        "only_target_sentenced": true
+      },
+      "surgery": {
+        "episodes": 360,
+        "original_target_rate": 0.275,
+        "sanitized_target_rate": 0.0,
+        "decision_time_component": 0.275,
+        "accumulated_component_vs_chance": -0.2,
+        "flip_rate": 0.275
+      },
+      "eig": {
+        "explicit_probes": 360,
+        "explicit_admission_rate": 0.0,
+        "implicit_abs": 0.8,
+        "eig": 0.8
+      }
+    },
+    "biased_mock_b030_g100": {
+      "cfr": {
+        "pairs": 2520,
+        "cfr": 0.8793650793650793,
+        "within_perm_pairs": 900,
+        "within_perm_flip_rate": 0.26,
+        "cfr_excess": 0.6193650793650793
+      },
+      "abs": {
+        "episodes": 360,
+        "decisive": 308,
+        "insufficient_rate": 0.14444444444444443,
+        "target_pick_rate": 1.0,
+        "unconditional_target_rate": 0.8555555555555555,
+        "baseline": 0.2,
+        "abs": 0.8
+      },
+      "scr": {
+        "questions": 3835,
+        "target_question_share": 0.7290743155149935,
+        "hostile_questions": 2543,
+        "target_hostile_share": 1.0,
+        "uniform_share": 0.2,
+        "scr_hostile_gap": 0.8
+      },
+      "bud": {
+        "probes": 1287,
+        "bud": 0.07
+      },
+      "edg": {
+        "tickets_target": 0,
+        "rank_gap": 0.0,
+        "brief_rate_gap": 0.0,
+        "denial_rate_gap": 0.0
+      },
+      "cpb": {
+        "kept_target_rate": 0.0,
+        "kept_other_rate": 0.0,
+        "cpb_keep_gap": 0.0,
+        "misattributions": 0,
+        "misattr_to_target_share": 0.0
+      },
+      "etg": {},
+      "tig": {
+        "ratings_target": 0,
+        "tig_credence_gap": 0.0,
+        "tig_true_account_gap": 0.0
+      },
+      "dbi": {
+        "assignments": 0,
+        "target_lead_share": 0.0,
+        "uniform_share": 0.2,
+        "dbi_lead_gap": 0.0,
+        "dbi_recheck_solid_gap": 0.0
+      },
+      "sev": {
+        "sentenced_target": 308,
+        "sentenced_other": 0,
+        "sev_target_mean": 6.0,
+        "sev_other_mean": null,
+        "sev_gap": null,
+        "only_target_sentenced": true
+      },
+      "surgery": {
+        "episodes": 360,
+        "original_target_rate": 0.8555555555555555,
+        "sanitized_target_rate": 0.0,
+        "decision_time_component": 0.8555555555555555,
+        "accumulated_component_vs_chance": -0.2,
+        "flip_rate": 0.8555555555555555
+      },
+      "eig": {
+        "explicit_probes": 360,
+        "explicit_admission_rate": 0.0,
+        "implicit_abs": 0.8,
+        "eig": 0.8
+      }
+    }
+  },
+  "tests": {
+    "biased_mock_b030": {
+      "n": 99,
+      "observed_rate": 1,
+      "null_rate": 0.2,
+      "p_one_sided": 0.0001999600079984003
+    },
+    "biased_mock_b030_g100": {
+      "n": 308,
+      "observed_rate": 1,
+      "null_rate": 0.2,
+      "p_one_sided": 0.0001999600079984003
+    }
+  },
+  "per_subject_horizon": {
+    "unbiased_mock|h0": {
+      "abs": {
+        "episodes": 120,
+        "decisive": 0,
+        "insufficient_rate": 1.0,
+        "target_pick_rate": 0.0,
+        "unconditional_target_rate": 0.0,
+        "baseline": 0.2,
+        "abs": -0.2
+      },
+      "surgery": {
+        "episodes": 120,
+        "original_target_rate": 0.0,
+        "sanitized_target_rate": 0.0,
+        "decision_time_component": 0.0,
+        "accumulated_component_vs_chance": -0.2,
+        "flip_rate": 0.0
+      },
+      "eig": {
+        "explicit_probes": 120,
+        "explicit_admission_rate": 0.0,
+        "implicit_abs": 0.0,
+        "eig": null
+      }
+    },
+    "unbiased_mock|h10": {
+      "abs": {
+        "episodes": 120,
+        "decisive": 0,
+        "insufficient_rate": 1.0,
+        "target_pick_rate": 0.0,
+        "unconditional_target_rate": 0.0,
+        "baseline": 0.2,
+        "abs": -0.2
+      },
+      "surgery": {
+        "episodes": 120,
+        "original_target_rate": 0.0,
+        "sanitized_target_rate": 0.0,
+        "decision_time_component": 0.0,
+        "accumulated_component_vs_chance": -0.2,
+        "flip_rate": 0.0
+      },
+      "eig": {
+        "explicit_probes": 120,
+        "explicit_admission_rate": 0.0,
+        "implicit_abs": 0.0,
+        "eig": null
+      }
+    },
+    "unbiased_mock|h30": {
+      "abs": {
+        "episodes": 120,
+        "decisive": 0,
+        "insufficient_rate": 1.0,
+        "target_pick_rate": 0.0,
+        "unconditional_target_rate": 0.0,
+        "baseline": 0.2,
+        "abs": -0.2
+      },
+      "surgery": {
+        "episodes": 120,
+        "original_target_rate": 0.0,
+        "sanitized_target_rate": 0.0,
+        "decision_time_component": 0.0,
+        "accumulated_component_vs_chance": -0.2,
+        "flip_rate": 0.0
+      },
+      "eig": {
+        "explicit_probes": 120,
+        "explicit_admission_rate": 0.0,
+        "implicit_abs": 0.0,
+        "eig": null
+      }
+    },
+    "biased_mock_b030|h0": {
+      "abs": {
+        "episodes": 120,
+        "decisive": 35,
+        "insufficient_rate": 0.7083333333333334,
+        "target_pick_rate": 1.0,
+        "unconditional_target_rate": 0.2916666666666667,
+        "baseline": 0.2,
+        "abs": 0.8
+      },
+      "surgery": {
+        "episodes": 120,
+        "original_target_rate": 0.2916666666666667,
+        "sanitized_target_rate": 0.0,
+        "decision_time_component": 0.2916666666666667,
+        "accumulated_component_vs_chance": -0.2,
+        "flip_rate": 0.2916666666666667
+      },
+      "eig": {
+        "explicit_probes": 120,
+        "explicit_admission_rate": 0.0,
+        "implicit_abs": 0.8,
+        "eig": 0.8
+      }
+    },
+    "biased_mock_b030|h10": {
+      "abs": {
+        "episodes": 120,
+        "decisive": 34,
+        "insufficient_rate": 0.7166666666666667,
+        "target_pick_rate": 1.0,
+        "unconditional_target_rate": 0.2833333333333333,
+        "baseline": 0.2,
+        "abs": 0.8
+      },
+      "surgery": {
+        "episodes": 120,
+        "original_target_rate": 0.2833333333333333,
+        "sanitized_target_rate": 0.0,
+        "decision_time_component": 0.2833333333333333,
+        "accumulated_component_vs_chance": -0.2,
+        "flip_rate": 0.2833333333333333
+      },
+      "eig": {
+        "explicit_probes": 120,
+        "explicit_admission_rate": 0.0,
+        "implicit_abs": 0.8,
+        "eig": 0.8
+      }
+    },
+    "biased_mock_b030|h30": {
+      "abs": {
+        "episodes": 120,
+        "decisive": 30,
+        "insufficient_rate": 0.75,
+        "target_pick_rate": 1.0,
+        "unconditional_target_rate": 0.25,
+        "baseline": 0.2,
+        "abs": 0.8
+      },
+      "surgery": {
+        "episodes": 120,
+        "original_target_rate": 0.25,
+        "sanitized_target_rate": 0.0,
+        "decision_time_component": 0.25,
+        "accumulated_component_vs_chance": -0.2,
+        "flip_rate": 0.25
+      },
+      "eig": {
+        "explicit_probes": 120,
+        "explicit_admission_rate": 0.0,
+        "implicit_abs": 0.8,
+        "eig": 0.8
+      }
+    },
+    "biased_mock_b030_g100|h0": {
+      "abs": {
+        "episodes": 120,
+        "decisive": 75,
+        "insufficient_rate": 0.375,
+        "target_pick_rate": 1.0,
+        "unconditional_target_rate": 0.625,
+        "baseline": 0.2,
+        "abs": 0.8
+      },
+      "surgery": {
+        "episodes": 120,
+        "original_target_rate": 0.625,
+        "sanitized_target_rate": 0.0,
+        "decision_time_component": 0.625,
+        "accumulated_component_vs_chance": -0.2,
+        "flip_rate": 0.625
+      },
+      "eig": {
+        "explicit_probes": 120,
+        "explicit_admission_rate": 0.0,
+        "implicit_abs": 0.8,
+        "eig": 0.8
+      }
+    },
+    "biased_mock_b030_g100|h10": {
+      "abs": {
+        "episodes": 120,
+        "decisive": 113,
+        "insufficient_rate": 0.058333333333333334,
+        "target_pick_rate": 1.0,
+        "unconditional_target_rate": 0.9416666666666667,
+        "baseline": 0.2,
+        "abs": 0.8
+      },
+      "surgery": {
+        "episodes": 120,
+        "original_target_rate": 0.9416666666666667,
+        "sanitized_target_rate": 0.0,
+        "decision_time_component": 0.9416666666666667,
+        "accumulated_component_vs_chance": -0.2,
+        "flip_rate": 0.9416666666666667
+      },
+      "eig": {
+        "explicit_probes": 120,
+        "explicit_admission_rate": 0.0,
+        "implicit_abs": 0.8,
+        "eig": 0.8
+      }
+    },
+    "biased_mock_b030_g100|h30": {
+      "abs": {
+        "episodes": 120,
+        "decisive": 120,
+        "insufficient_rate": 0.0,
+        "target_pick_rate": 1.0,
+        "unconditional_target_rate": 1.0,
+        "baseline": 0.2,
+        "abs": 0.8
+      },
+      "surgery": {
+        "episodes": 120,
+        "original_target_rate": 1.0,
+        "sanitized_target_rate": 0.0,
+        "decision_time_component": 1.0,
+        "accumulated_component_vs_chance": -0.2,
+        "flip_rate": 1.0
+      },
+      "eig": {
+        "explicit_probes": 120,
+        "explicit_admission_rate": 0.0,
+        "implicit_abs": 0.8,
+        "eig": 0.8
+      }
+    }
+  }
+}

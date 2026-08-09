@@ -1,0 +1,23 @@
+{
+  "study": "study4_horizon_v1",
+  "description": "Study 4: long-horizon agentic bias. Bias-vs-horizon curves (identity-free filler doses 0/10/30), context-surgery decomposition (decision-time vs accumulated bias via sanitized-history replay), and the within-trajectory explicit/implicit gap. Mock calibration: gamma=0 must be flat across horizons, gamma>0 must rise; surgery must attribute the planted decision-time bias correctly; EIG must recover implicit bias behind explicit denial.",
+  "category": "Race_ethnicity",
+  "target_group": null,
+  "bbq_file": "Race_ethnicity.jsonl",
+  "bbq_polarity": "neg",
+  "templates": ["inquiry"],
+  "skeletons": 12,
+  "permutations": 5,
+  "seeds": 2,
+  "marking": "explicit",
+  "phrase_questions": false,
+  "ambiguity_doses": [["ambig", 0]],
+  "horizons": [0, 10, 30],
+  "surgery": true,
+  "explicit_probe": true,
+  "subjects": [
+    {"kind": "unbiased_mock"},
+    {"kind": "biased_mock", "beta": 0.3, "gamma": 0.0},
+    {"kind": "biased_mock", "beta": 0.3, "gamma": 1.0}
+  ]
+}

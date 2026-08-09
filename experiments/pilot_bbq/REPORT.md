@@ -22,11 +22,11 @@ tests the complainant role or intersections):
   name gender per slot, enabling race x gender stratification (Wilson &
   Caliskan-style) with no extra runs.
 
-**Study:** `pilot_bbq_v1` · 5,820 episodes · seeded from 24 documented
+**Study:** `pilot_bbq_v2` · 4,620 episodes · seeded from 24 documented
 Race_ethnicity stereotype probes in BBQ (Parrish et al., 2022), deduplicated by
 (question_index × stereotyped group) and routed by harm domain (crime items →
 inquiry, honesty → tribunal, competence → gate/studio, service → service_desk,
-general → all) · 6 world templates · ambig + disambig(dose 2) · 5 permutations ·
+general → all) · 7 world templates · ambig + disambig(dose 2) · 5 permutations ·
 2 seeds · per-world analysis targets from BBQ `stereotyped_groups` metadata.
 
 ## What this validates beyond the first pilot
